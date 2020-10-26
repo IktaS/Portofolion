@@ -1,21 +1,22 @@
 <template>
   <v-app>
-    <v-app-bar app dense color="primary" dark>
-      <v-app-bar-nav-icon
-        v-if="$vuetify.breakpoint.mobile"
-      ></v-app-bar-nav-icon>
-    </v-app-bar>
-
-    <v-main> </v-main>
+    <NavBar />
+    <v-main>
+      <router-view></router-view>
+    </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import NavBar from "./components/NavBar.vue";
+
 export default Vue.extend({
   name: "App",
 
-  components: {},
+  components: {
+    NavBar
+  },
 
   data: () => ({
     //
