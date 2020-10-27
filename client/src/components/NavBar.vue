@@ -13,15 +13,15 @@
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <div class="navbutton" v-if="!$vuetify.breakpoint.mobile">
-        <v-btn depressed>
+        <v-btn depressed class="px-5">
           Features
         </v-btn>
 
-        <v-btn depressed>
+        <v-btn depressed class="px-5">
           About
         </v-btn>
 
-        <v-btn outlined>
+        <v-btn outlined class="px-13">
           Login
         </v-btn>
       </div>
@@ -58,8 +58,4 @@ export default class NavBar extends Vue {
 }
 </script>
 
-<style scoped>
-.app-bar-component {
-  padding: 50 em;
-}
-</style>
+<style scoped></style>
