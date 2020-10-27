@@ -20,7 +20,7 @@ export default class Home extends Vue {
     this.todo = (await TodoService.getTodo("1")).data;
   }
 
-  created() {
+  mounted() {
     this.initTodo();
   }
 }

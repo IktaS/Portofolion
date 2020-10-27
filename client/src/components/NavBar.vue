@@ -21,7 +21,7 @@
           About
         </v-btn>
 
-        <v-btn outlined class="px-13">
+        <v-btn outlined class="px-13" to="/login">
           Login
         </v-btn>
       </div>
@@ -37,7 +37,7 @@
             <v-list-item-title>About</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-btn outlined>
+            <v-btn outlined to="/login">
               Login
             </v-btn>
           </v-list-item>
