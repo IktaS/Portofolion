@@ -35,7 +35,7 @@
       </v-form>
       <v-row justify="center">
         <v-col :cols="$vuetify.breakpoint.mobile ? '10' : '4'">
-          <v-btn label="Sign Up" text x-small block to="/signup">
+          <v-btn label="Sign Up" text x-small block to="/login">
             Login
           </v-btn>
         </v-col>
