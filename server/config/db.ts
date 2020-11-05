@@ -1,6 +1,8 @@
+import {dbAddress, dbSecret} from "../secrets"
+
 const databaseConfig = {
-	database: "mongodb://localhost:27017/",
-	secret: "password",
+	database: dbAddress,
+	secret: dbSecret,
 };
 
 export default databaseConfig;
