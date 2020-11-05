@@ -1,10 +1,11 @@
 import express from "express";
 const PORT = process.env.PORT || 4000;
 import cors from "cors";
-import morgan from 'morgan';
-import DatabaseDriver from './services/db/db';
-import { dbAddress, dbSecret } from './secrets';
+import morgan from "morgan";
+import DatabaseDriver from "./services/db/db";
+import { dbAddress, dbSecret } from "./secrets";
 import MongoDriver from "./services/db/mongoDB";
+import UserRoutes from "./routes/userRoutes";
 
 class Server {
 	public app: express.Application;
@@ -12,9 +13,10 @@ class Server {
 
 	constructor() {
 		this.app = express();
-		this.db = new MongoDriver(dbAddress,dbSecret);
+		this.db = new MongoDriver(dbAddress, dbSecret);
 		this.config();
 		this.db.connect();
+		this.routes();
 	}
 
 	public start(): void {
@@ -26,9 +28,13 @@ class Server {
 	private config(): void {
 		this.app.set("port", PORT);
 		this.app.use(express.json());
-		this.app.use(express.urlencoded({extended:false}));
+		this.app.use(express.urlencoded({ extended: false }));
 		this.app.use(cors());
-		this.app.use(morgan('dev'));
+		this.app.use(morgan("dev"));
+	}
+
+	private routes(): void {
+		this.app.use("/api/v1/user", new UserRoutes().router);
 	}
 }
 
