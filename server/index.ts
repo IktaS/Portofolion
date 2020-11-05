@@ -1,35 +1,37 @@
 import express from "express";
 const PORT = process.env.PORT || 4000;
-import morgan from "morgan";
 import cors from "cors";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import config from "./config/db";
+import morgan from 'morgan';
+import DatabaseDriver from './services/db/db';
+import { dbAddress, dbSecret } from './secrets';
+import MongoDriver from "./services/db/mongoDB";
 
-const app = express();
-//configure database and mongoose
-mongoose.set("useCreateIndex", true);
-mongoose
-	.connect(config.database, { useNewUrlParser: true })
-	.then(() => {
-		console.log("Database is connected");
-	})
-	.catch((err) => {
-		console.log({ database_error: err });
-	});
+class Server {
+	public app: express.Application;
+	private db: DatabaseDriver;
 
-// db configuaration ends here
-//registering cors
-app.use(cors());
-//configure body parser
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-//configure body-parser ends here
-app.use(morgan("dev")); // configire morgan
-// define first route
-app.get("/", (req, res) => {
-	res.json("Hola MEVN devs...Assemble");
-});
-app.listen(PORT, () => {
-	console.log(`App is running on ${PORT}`);
-});
+	constructor() {
+		this.app = express();
+		this.db = new MongoDriver(dbAddress,dbSecret);
+		this.config();
+		this.db.connect();
+	}
+
+	public start(): void {
+		this.app.listen(this.app.get("port"), () => {
+			console.log(`API is running at PORT ${this.app.get("port")}`);
+		});
+	}
+
+	private config(): void {
+		this.app.set("port", PORT);
+		this.app.use(express.json());
+		this.app.use(express.urlencoded({extended:false}));
+		this.app.use(cors());
+		this.app.use(morgan('dev'));
+	}
+}
+
+const server = new Server();
+
+server.start();
