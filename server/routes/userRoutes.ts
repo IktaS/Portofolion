@@ -12,5 +12,6 @@ export default class UserRoutes {
 
 	private routes(): void {
 		this.router.post("/register", this.userController.registerUser);
+		this.router.post("/:username", this.userController.getUser);
 	}
 }
