@@ -2,6 +2,7 @@ import express from "express";
 const PORT = process.env.PORT || 4000;
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import DatabaseDriver from "./services/db/db";
 import { dbAddress, dbSecret } from "./secrets";
 import MongoDriver from "./services/db/mongoDB";
@@ -31,6 +32,7 @@ class Server {
 		this.app.use(express.urlencoded({ extended: false }));
 		this.app.use(cors());
 		this.app.use(morgan("dev"));
+		this.app.use(cookieParser());
 	}
 
 	private routes(): void {
