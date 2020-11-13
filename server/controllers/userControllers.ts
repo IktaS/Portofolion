@@ -3,6 +3,13 @@ import { User } from "../models/userModel";
 
 export default class UserController {
 	public async registerUser(req: Request, res: Response): Promise<void> {
+
+		let exist : Boolean = await User.exists({ username: req.params.username });
+		if(exist){
+			res.status(400).send();
+			return;
+		}
+
 		await User.create({
 			username: req.body.username,
 			password: req.body.password,
