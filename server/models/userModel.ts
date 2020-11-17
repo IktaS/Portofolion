@@ -4,11 +4,13 @@ import bcrypt from "bcrypt";
 export interface IUser extends Document {
     username: string;
     password: string;
+    githubKey: string | null;
 };
   
 export const userSchema: Schema = new Schema({
     username: String,
     password: String,
+    githubKey: String,
 });
 
 export const User: Model<IUser> = model<IUser>("User", userSchema);
