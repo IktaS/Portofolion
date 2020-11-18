@@ -13,13 +13,13 @@ export default class UserRoutes {
 
 	private routes(): void {
 		this.router.post("/register", this.userController.registerUser);
-		this.router.post("/:username", this.userController.getUser);
-		this.router.post(
-			"/login",
-			passport.authenticate("local", {
-				successRedirect: "/dashboard",
-				failureRedirect: "/login",
-			})
-		);
+		this.router.post("/login", passport.authenticate("local"), function (
+			req,
+			res,
+			next
+		) {
+			res.status(200).send();
+		});
+		this.router.get("/:username", this.userController.getUser);
 	}
 }

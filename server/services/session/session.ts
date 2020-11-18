@@ -1,15 +1,14 @@
-import session from "express-session"
-import { sessSecret } from "../../secrets"
-import sessionStore from "./sessionStore"
+import session from "express-session";
+import { sessSecret } from "../../secrets";
+import sessionStore from "./sessionStore";
 
 const expressSession = session({
-    secret: sessSecret,
-    store: sessionStore,
-    cookie: {
-        httpOnly: true,
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
-    },
-})
+	secret: sessSecret,
+	store: sessionStore,
+	cookie: {
+		httpOnly: true,
+		maxAge: 1000 * 60 * 60 * 24, // 1 day
+	},
+});
 
-export default expressSession
+export default expressSession;
