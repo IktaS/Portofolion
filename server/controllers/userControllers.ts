@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { IUser, User } from "../models/userModel";
+import passport from "passport";
+import { nextTick } from "process";
 
 export default class UserController {
 	public async registerUser(req: Request, res: Response): Promise<void> {
-
-		let exist : Boolean = await User.exists({ username: req.params.username });
-		if(exist){
+		const exist: Boolean = await User.exists({ username: req.params.username });
+		if (exist) {
 			res.status(400).send();
 			return;
 		}
@@ -26,7 +27,7 @@ export default class UserController {
 	public async saveGithubKey(req: Request, res: Response): Promise<void> {
 		let user = await User.findOne({ username: req.params.username });
 
-		if(!user){
+		if (!user) {
 			res.status(400).send();
 			return;
 		}
