@@ -42,4 +42,15 @@ userSchema.methods.comparePassword = function (
 	);
 };
 
-export const User: Model<IUser> = model<IUser>("User", userSchema);
+userSchema.methods.filterPassword = function () {
+	let user = this.toObject();
+	let filtered = Object.keys(user)
+		.filter((key) => key != "password")
+		.reduce((obj: any, key) => {
+			obj[key] = user[key];
+			return obj;
+		}, {});
+	return filtered;
+};
+
+export const User: Model<IUser> = model<IUser>("user", userSchema);

@@ -26,18 +26,11 @@ export default class UserController {
 	}
 
 	public async getUser(req: Request, res: Response): Promise<void> {
-		const user = (
-			await User.findOne({ username: req.params.username })
-		)?.toObject();
+		const user = await User.findOne({ username: req.params.username });
 		if (!user) {
 			res.status(400).send();
 		}
-		let filtered = Object.keys(user)
-			.filter((key) => key != "password")
-			.reduce((obj: any, key) => {
-				obj[key] = user[key];
-				return obj;
-			}, {});
+		let filtered = (user as any).filterPassword();
 		res.json(filtered);
 	}
 
@@ -62,14 +55,8 @@ export default class UserController {
 				res.status(401).send();
 				return;
 			}
-			let user = req.user.toObject();
-			let filtered = Object.keys(user)
-				.filter((key) => key != "password")
-				.reduce((obj: any, key) => {
-					obj[key] = user[key];
-					return obj;
-				}, {});
-			res.send(filtered);
+			let user = (req.user as any).filterPassword();
+			res.send(user);
 		} else {
 			res.status(401).send();
 			return;
