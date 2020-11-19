@@ -9,7 +9,7 @@ export default class UserController {
 	): Promise<void> {
 		const exist: Boolean = await User.exists({ username: req.body.username });
 		if (exist) {
-			res.status(400).send();
+			res.status(400).redirect("/register");
 			return;
 		}
 
