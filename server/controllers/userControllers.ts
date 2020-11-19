@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { IUser, User } from "../models/userModel";
-import passport from "passport";
 
 export default class UserController {
-	public async registerUser(req: Request, res: Response): Promise<void> {
+	public async registerUser(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
 		const exist: Boolean = await User.exists({ username: req.body.username });
 		if (exist) {
 			res.status(400).send();
@@ -19,11 +22,23 @@ export default class UserController {
 			if (err) throw err;
 		});
 		res.status(200).send();
+		next();
 	}
 
 	public async getUser(req: Request, res: Response): Promise<void> {
-		const user = await User.find({ username: req.params.username });
-		res.json(user);
+		const user = (
+			await User.findOne({ username: req.params.username })
+		)?.toObject();
+		if (!user) {
+			res.status(400).send();
+		}
+		let filtered = Object.keys(user)
+			.filter((key) => key != "password")
+			.reduce((obj: any, key) => {
+				obj[key] = user[key];
+				return obj;
+			}, {});
+		res.json(filtered);
 	}
 
 	public async saveGithubKey(req: Request, res: Response): Promise<void> {
@@ -35,5 +50,29 @@ export default class UserController {
 		}
 		user.githubKey = req.body.githubKey;
 		user.save();
+	}
+
+	public async getDashboard(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	): Promise<void> {
+		if (req.isAuthenticated()) {
+			if (!req.user) {
+				res.status(401).send();
+				return;
+			}
+			let user = req.user.toObject();
+			let filtered = Object.keys(user)
+				.filter((key) => key != "password")
+				.reduce((obj: any, key) => {
+					obj[key] = user[key];
+					return obj;
+				}, {});
+			res.send(filtered);
+		} else {
+			res.status(401).send();
+			return;
+		}
 	}
 }
