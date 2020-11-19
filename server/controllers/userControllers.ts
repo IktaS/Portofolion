@@ -36,13 +36,13 @@ export default class UserController {
 
 	public async saveGithubKey(req: Request, res: Response): Promise<void> {
 		let user = await User.findOne({ username: req.body.username });
-
 		if (!user) {
 			res.status(400).send();
 			return;
 		}
 		user.githubKey = req.body.githubKey;
 		user.save();
+		res.status(200).send();
 	}
 
 	public async getDashboard(
