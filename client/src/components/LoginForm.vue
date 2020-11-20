@@ -53,8 +53,9 @@
 
 <script lang="ts">
 import Axios from "axios";
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
+import { propagateEvent } from "@/utils/eventsUtil";
 
 @Component
 export default class LoginForm extends Vue {
@@ -81,10 +82,33 @@ export default class LoginForm extends Vue {
         password: this.password
       });
     } catch (error) {
-      location.reload();
+      propagateEvent(
+        this,
+        "callSnackbar",
+        "Username or Password might be wrong"
+      );
       return;
     }
     router.push("/dashboard");
+  }
+
+  @Watch("username")
+  private onUsernameChanged(value: string) {
+    if (!value) return;
+    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
+      .then(res => {
+        if (res.status === 200) {
+          this.usernameExist = true;
+          this.usernameErrors = [];
+        } else {
+          this.usernameExist = false;
+          this.usernameErrors = ["No such email or username"];
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        propagateEvent(this, "callSnackbar", "Something went wrong");
+      });
   }
 }
 </script>

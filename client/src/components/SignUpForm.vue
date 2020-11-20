@@ -138,6 +138,7 @@ export default class SignUpForm extends Vue {
 
   @Watch("username")
   private onUsernameChanged(value: string) {
+    if (!value) return;
     Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
       .then(res => {
         if (res.status === 200) {
@@ -155,6 +156,7 @@ export default class SignUpForm extends Vue {
 
   @Watch("email")
   private onEmailChanged(value: string) {
+    if (!value) return;
     Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
       .then(res => {
         if (res.status === 200) {
