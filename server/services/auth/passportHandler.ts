@@ -9,28 +9,31 @@ class Passport {
 		this.instance = passport;
 	}
 
-	private localAuthentication(username: string, password: string, done: any) {
-		User.findOne({ username: username }, (err, user: any) => {
-			if (err) {
-				return done(err);
-			}
-			if (!user) {
-				return done(null, false, {
-					message: `username ${username} not found.`,
-				});
-			}
-			user.comparePassword(password, (err: Error, isMatch: boolean) => {
+	private localAuthentication(id: string, password: string, done: any) {
+		User.findOne(
+			{ $or: [{ username: id }, { email: id }] },
+			(err, user: any) => {
 				if (err) {
 					return done(err);
 				}
-				if (isMatch) {
-					return done(undefined, user);
+				if (!user) {
+					return done(null, false, {
+						message: `id ${id} not found.`,
+					});
 				}
-				return done(undefined, false, {
-					message: "Invalid username or password",
+				user.comparePassword(password, (err: Error, isMatch: boolean) => {
+					if (err) {
+						return done(err);
+					}
+					if (isMatch) {
+						return done(undefined, user);
+					}
+					return done(undefined, false, {
+						message: "Invalid id or password",
+					});
 				});
-			});
-		});
+			}
+		);
 	}
 
 	public initialize() {

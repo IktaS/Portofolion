@@ -4,12 +4,14 @@ import bcrypt from "bcrypt";
 export interface IUser extends Document {
 	username: string;
 	password: string;
+	email: string;
 	githubKey: string | null;
 }
 
 export const userSchema: Schema = new Schema({
 	username: String,
 	password: String,
+	email: String,
 	githubKey: String,
 });
 

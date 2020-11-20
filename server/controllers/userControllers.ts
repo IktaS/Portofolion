@@ -2,27 +2,25 @@ import { NextFunction, Request, Response } from "express";
 import { IUser, User } from "../models/userModel";
 
 export default class UserController {
-	public async registerUser(
-		req: Request,
-		res: Response,
-		next: NextFunction
-	): Promise<void> {
-		const exist: Boolean = await User.exists({ username: req.body.username });
+	public async registerUser(req: Request, res: Response): Promise<void> {
+		const exist: Boolean = await User.exists({
+			$or: [{ username: req.body.username }, { email: req.body.email }],
+		});
 		if (exist) {
-			res.status(400).redirect("/register");
+			res.status(400).json({ message: "username or email exist" });
 			return;
 		}
 
 		let newUser = new User({
 			username: req.body.username,
 			password: req.body.password,
+			email: req.body.email,
 			githubKey: null,
 		});
 		newUser.save((err) => {
 			if (err) throw err;
 		});
 		res.status(200).send();
-		next();
 	}
 
 	public async getUser(req: Request, res: Response): Promise<void> {
@@ -45,11 +43,7 @@ export default class UserController {
 		res.status(200).send();
 	}
 
-	public async getDashboard(
-		req: Request,
-		res: Response,
-		next: NextFunction
-	): Promise<void> {
+	public async getDashboard(req: Request, res: Response): Promise<void> {
 		if (req.isAuthenticated()) {
 			if (!req.user) {
 				res.status(401).send();
