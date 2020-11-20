@@ -4,7 +4,6 @@
       <v-card-text>
         {{ message }}
       </v-card-text>
-      <v-card-actions>
     </v-card>
   </v-dialog>
 </template>
