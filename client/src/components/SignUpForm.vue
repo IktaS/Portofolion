@@ -1,15 +1,6 @@
 <template>
   <v-card>
     <v-container>
-      <pop-up-dialog
-        :isOn="dialogData.isOn"
-        :color="dialogData.color"
-        :label="dialogData.label"
-        :width="dialogData.width"
-        :message="dialogData.message"
-        ref="dialog"
-      >
-      </pop-up-dialog>
       <v-form ref="form" v-model="valid">
         <v-row justify="center">
           <v-col cols="11">
@@ -21,6 +12,7 @@
             <v-text-field
               v-model="username"
               :rules="usernameRules"
+              :error-messages="usernameErrors"
               label="Username"
               outlined
               required
@@ -33,6 +25,7 @@
             <v-text-field
               v-model="email"
               :rules="emailRules"
+              :error-messages="emailErrors"
               label="Email"
               outlined
               required
@@ -89,15 +82,10 @@
 
 <script lang="ts">
 import Axios from "axios";
-import { Component, Vue } from "vue-property-decorator";
-import PopUpDialog from "@/components/PopUpDialog.vue";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
 
-@Component({
-  components: {
-    PopUpDialog
-  }
-})
+@Component
 export default class SignUpForm extends Vue {
   private valid = null;
   private username = "";
@@ -112,6 +100,11 @@ export default class SignUpForm extends Vue {
   private passwordRules = [(v: string) => !!v || "Password is required"];
   private confirm_password = "";
   private show2 = false;
+
+  private usernameExist = true;
+  private usernameErrors: string[] = [];
+  private emailExist = true;
+  private emailErrors: string[] = [];
 
   private dialogData = {
     isOn: false,
@@ -128,21 +121,51 @@ export default class SignUpForm extends Vue {
       form.validate();
       return;
     }
-    //eslint-disable-next-line
-    const dialog: any = this.$refs.dialog;
-    dialog.open();
     try {
-      await Axios.post("http://localhost:4000/api/v1/user/register", {
+      await Axios.post("http://localhost:4000/api/v1/users/register", {
         username: this.username,
         email: this.email,
         password: this.password
       });
     } catch (error) {
-      this.dialogData.color = "error";
-      this.dialogData.message = "Username or email exist";
+      location.reload();
       return;
     }
     router.push("/");
+  }
+
+  @Watch("username")
+  private onUsernameChanged(value: string) {
+    Axios.get(`http://localhost:4000/api/v1/users/user/${value}`)
+      .then(res => {
+        if (res.status === 200) {
+          this.usernameExist = true;
+          this.usernameErrors = ["Username exist"];
+        } else {
+          this.usernameExist = true;
+          this.usernameErrors = [];
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  @Watch("email")
+  private onEmailChanged(value: string) {
+    Axios.get(`http://localhost:4000/api/v1/users/user/${value}`)
+      .then(res => {
+        if (res.status === 200) {
+          this.emailExist = true;
+          this.emailErrors = ["email exist"];
+        } else {
+          this.emailExist = true;
+          this.emailErrors = [];
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 }
 </script>
