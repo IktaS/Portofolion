@@ -56,4 +56,15 @@ export default class UserController {
 			return;
 		}
 	}
+
+	public async checkUser(req: Request, res: Response): Promise<void> {
+		const exist: Boolean = await User.exists({
+			$or: [{ username: req.params.value }, { email: req.params.value }],
+		});
+		if (exist) {
+			res.status(200).json({ message: "username or email exist" });
+		}else {
+			res.status(204).json({ message: "username or email exist" });
+		}
+	}
 }

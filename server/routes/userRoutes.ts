@@ -21,6 +21,7 @@ export default class UserRoutes {
 			res.status(200).send();
 		});
 		this.router.get("/dashboard", this.userController.getDashboard);
+		this.router.get("/check/:value", this.userController.checkUser)
 		this.router.get("/user/:username", this.userController.getUser);
 	}
 }
