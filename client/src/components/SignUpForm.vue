@@ -1,6 +1,15 @@
 <template>
   <v-card>
     <v-container>
+      <pop-up-dialog
+        :isOn="dialogData.isOn"
+        :color="dialogData.color"
+        :label="dialogData.label"
+        :width="dialogData.width"
+        :message="dialogData.message"
+        ref="dialog"
+      >
+      </pop-up-dialog>
       <v-form ref="form" v-model="valid">
         <v-row justify="center">
           <v-col cols="11">
@@ -63,7 +72,9 @@
         </v-row>
         <v-row justify="center">
           <v-col :cols="$vuetify.breakpoint.mobile ? '10' : '4'">
-            <v-btn @click="submit" label="signup" block outlined>Sign Up</v-btn>
+            <v-btn @click.stop="submit" label="signup" block outlined>
+              Sign Up
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -77,11 +88,16 @@
 </template>
 
 <script lang="ts">
-import router from "@/router";
 import Axios from "axios";
 import { Component, Vue } from "vue-property-decorator";
+import PopUpDialog from "@/components/PopUpDialog.vue";
+import router from "@/router";
 
-@Component
+@Component({
+  components: {
+    PopUpDialog
+  }
+})
 export default class SignUpForm extends Vue {
   private valid = null;
   private username = "";
@@ -97,20 +113,36 @@ export default class SignUpForm extends Vue {
   private confirm_password = "";
   private show2 = false;
 
+  private dialogData = {
+    isOn: false,
+    color: "primary",
+    width: "300",
+    label: "Signing in...",
+    message: "Signed Up!"
+  };
+
   public async submit() {
     if (!this.valid) {
+      //eslint-disable-next-line
+      const form: any = this.$refs.form;
+      form.validate();
       return;
     }
-    const res = await Axios.post("http://localhost:4000/api/v1/user/register", {
-      username: this.username,
-      email: this.email,
-      password: this.password
-    });
-    if (res.status == 200) {
-      router.push("/dashboard");
-    } else {
-      router.push("/signup");
+    //eslint-disable-next-line
+    const dialog: any = this.$refs.dialog;
+    dialog.open();
+    try {
+      await Axios.post("http://localhost:4000/api/v1/user/register", {
+        username: this.username,
+        email: this.email,
+        password: this.password
+      });
+    } catch (error) {
+      this.dialogData.color = "error";
+      this.dialogData.message = "Username or email exist";
+      return;
     }
+    router.push("/");
   }
 }
 </script>
