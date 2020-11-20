@@ -26,16 +26,16 @@ export default class UserController {
 	public async getUser(req: Request, res: Response): Promise<void> {
 		const user = await User.findOne({ username: req.params.username });
 		if (!user) {
-			res.status(400).send();
+			res.status(204).send();
 		}
 		let filtered = (user as any).filterPassword();
-		res.json(filtered);
+		res.status(200).json(filtered);
 	}
 
 	public async saveGithubKey(req: Request, res: Response): Promise<void> {
 		let user = await User.findOne({ username: req.body.username });
 		if (!user) {
-			res.status(400).send();
+			res.status(204).send();
 			return;
 		}
 		user.githubKey = req.body.githubKey;

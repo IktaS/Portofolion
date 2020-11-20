@@ -43,7 +43,7 @@ class Server {
 	}
 
 	private routes(): void {
-		this.app.use("/api/v1/user", new UserRoutes().router);
+		this.app.use("/api/v1/users", new UserRoutes().router);
 	}
 }
 
