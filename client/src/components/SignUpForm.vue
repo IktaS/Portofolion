@@ -4,7 +4,7 @@
       <v-form ref="form" v-model="valid">
         <v-row justify="center">
           <v-col cols="11">
-            <h1>Login to Portofolion</h1>
+            <h1>Sign Up to Portofolion</h1>
           </v-col>
         </v-row>
         <v-row justify="center">
@@ -84,6 +84,7 @@
 import Axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
+import { propagateEvent } from "@/utils/eventsUtil";
 
 @Component
 export default class SignUpForm extends Vue {
@@ -128,21 +129,22 @@ export default class SignUpForm extends Vue {
         password: this.password
       });
     } catch (error) {
-      location.reload();
+      propagateEvent(this, "callSnackbar", "Something went wrong");
       return;
     }
-    router.push("/login");
+    propagateEvent(this, "callSnackbar", "Successfully registered!");
+    router.push("/");
   }
 
   @Watch("username")
   private onUsernameChanged(value: string) {
-    Axios.get(`http://localhost:4000/api/v1/users/user/${value}`)
+    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
       .then(res => {
         if (res.status === 200) {
           this.usernameExist = true;
           this.usernameErrors = ["Username exist"];
         } else {
-          this.usernameExist = true;
+          this.usernameExist = false;
           this.usernameErrors = [];
         }
       })
@@ -153,13 +155,13 @@ export default class SignUpForm extends Vue {
 
   @Watch("email")
   private onEmailChanged(value: string) {
-    Axios.get(`http://localhost:4000/api/v1/users/user/${value}`)
+    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
       .then(res => {
         if (res.status === 200) {
           this.emailExist = true;
           this.emailErrors = ["email exist"];
         } else {
-          this.emailExist = true;
+          this.emailExist = false;
           this.emailErrors = [];
         }
       })

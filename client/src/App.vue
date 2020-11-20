@@ -1,25 +1,34 @@
 <template>
   <v-app>
     <NavBar />
-    <v-main>
+    <v-main @callSnackbar="callSnackbar">
       <router-view></router-view>
+      <pop-up-snack-bar ref="snackbar" :snackbar="snackbar" :text="text" />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import NavBar from "./components/NavBar.vue";
+import { Component, Vue } from "vue-property-decorator";
+import NavBar from "@/components/NavBar.vue";
+import PopUpSnackBar from "@/components/PopUpSnackBar.vue";
 
-export default Vue.extend({
+@Component({
   name: "App",
-
   components: {
-    NavBar
-  },
+    NavBar,
+    PopUpSnackBar
+  }
+})
+export default class App extends Vue {
+  private snackbar = false;
+  private text = "";
 
-  data: () => ({
-    //
-  })
-});
+  public callSnackbar(value: string) {
+    this.snackbar = true;
+    this.text = value;
+
+    setTimeout(() => (this.snackbar = false), 2000);
+  }
+}
 </script>
