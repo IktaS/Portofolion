@@ -131,7 +131,7 @@ export default class SignUpForm extends Vue {
       location.reload();
       return;
     }
-    router.push("/");
+    router.push("/login");
   }
 
   @Watch("username")
