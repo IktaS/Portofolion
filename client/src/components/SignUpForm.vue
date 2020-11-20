@@ -107,9 +107,9 @@ export default class SignUpForm extends Vue {
       password: this.password
     });
     if (res.status == 200) {
-      router.push("/");
+      router.push("/dashboard");
     } else {
-      router.push("/login");
+      router.push("/signup");
     }
   }
 }
