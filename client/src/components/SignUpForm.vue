@@ -81,10 +81,10 @@
 </template>
 
 <script lang="ts">
-import Axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
 import { propagateEvent } from "@/utils/eventsUtil";
+import AuthApi from "@/services/AuthService";
 
 @Component
 export default class SignUpForm extends Vue {
@@ -123,11 +123,7 @@ export default class SignUpForm extends Vue {
       return;
     }
     try {
-      await Axios.post("http://localhost:4000/api/v1/users/register", {
-        username: this.username,
-        email: this.email,
-        password: this.password
-      });
+      await AuthApi.register(this.username, this.email, this.password);
     } catch (error) {
       propagateEvent(this, "callSnackbar", "Something went wrong");
       return;
@@ -139,37 +135,29 @@ export default class SignUpForm extends Vue {
   @Watch("username")
   private onUsernameChanged(value: string) {
     if (!value) return;
-    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
-      .then(res => {
-        if (res.status === 200) {
-          this.usernameExist = true;
-          this.usernameErrors = ["Username exist"];
-        } else {
-          this.usernameExist = false;
-          this.usernameErrors = [];
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    AuthApi.check(value).then(value => {
+      if (value?.data.message !== undefined) {
+        this.usernameExist = true;
+        this.usernameErrors = ["Username exist"];
+      } else {
+        this.usernameExist = false;
+        this.usernameErrors = [];
+      }
+    });
   }
 
   @Watch("email")
   private onEmailChanged(value: string) {
     if (!value) return;
-    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
-      .then(res => {
-        if (res.status === 200) {
-          this.emailExist = true;
-          this.emailErrors = ["email exist"];
-        } else {
-          this.emailExist = false;
-          this.emailErrors = [];
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    AuthApi.check(value).then(value => {
+      if (value?.data.message !== undefined) {
+        this.emailExist = true;
+        this.emailErrors = ["Email exist"];
+      } else {
+        this.emailExist = false;
+        this.emailErrors = [];
+      }
+    });
   }
 }
 </script>

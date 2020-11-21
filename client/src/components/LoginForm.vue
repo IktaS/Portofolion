@@ -52,10 +52,10 @@
 </template>
 
 <script lang="ts">
-import Axios from "axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
 import { propagateEvent } from "@/utils/eventsUtil";
+import AuthApi from "@/services/AuthService";
 
 @Component
 export default class LoginForm extends Vue {
@@ -77,16 +77,9 @@ export default class LoginForm extends Vue {
       return;
     }
     try {
-      await Axios.post("http://localhost:4000/api/v1/users/login", {
-        username: this.username,
-        password: this.password
-      });
+      AuthApi.login(this.username, this.password);
     } catch (error) {
-      propagateEvent(
-        this,
-        "callSnackbar",
-        "Username or Password might be wrong"
-      );
+      propagateEvent(this, "callSnackbar", "Something went wrong");
       return;
     }
     router.push("/dashboard");
@@ -95,20 +88,15 @@ export default class LoginForm extends Vue {
   @Watch("username")
   private onUsernameChanged(value: string) {
     if (!value) return;
-    Axios.get(`http://localhost:4000/api/v1/users/check/${value}`)
-      .then(res => {
-        if (res.status === 200) {
-          this.usernameExist = true;
-          this.usernameErrors = [];
-        } else {
-          this.usernameExist = false;
-          this.usernameErrors = ["No such email or username"];
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        propagateEvent(this, "callSnackbar", "Something went wrong");
-      });
+    AuthApi.check(value).then(value => {
+      if (value?.data.message !== undefined) {
+        this.usernameExist = true;
+        this.usernameErrors = [];
+      } else {
+        this.usernameExist = false;
+        this.usernameErrors = ["Username does not exist"];
+      }
+    });
   }
 }
 </script>
