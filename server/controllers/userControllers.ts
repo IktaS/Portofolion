@@ -64,7 +64,7 @@ export default class UserController {
 		if (exist) {
 			res.status(200).json({ message: "username or email exist" });
 		}else {
-			res.status(204).json({ message: "username or email exist" });
+			res.status(204).send();
 		}
 	}
 }
