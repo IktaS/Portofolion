@@ -16,7 +16,10 @@ class TodoApi extends HttpClient {
 
   public getHome = async () => {
     try {
-      return (await this.instance.get<User>(`/dashboard`)).data;
+      console.log("called");
+      return (
+        await this.instance.get<User>(`/dashboard`, { withCredentials: true })
+      ).data;
     } catch (error) {
       console.error(error);
     }
