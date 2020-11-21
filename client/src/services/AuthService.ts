@@ -7,7 +7,7 @@ class AuthApi extends HttpClient {
 
   public login = async (username: string, password: string) => {
     try {
-      return await this.instance.post("/login", { username, password });
+      return (await this.instance.post("/login", { username, password })).data;
     } catch (error) {
       console.error(error);
     }
@@ -19,11 +19,13 @@ class AuthApi extends HttpClient {
     password: string
   ) => {
     try {
-      return await this.instance.post(`/register`, {
-        username,
-        email,
-        password
-      });
+      return (
+        await this.instance.post(`/register`, {
+          username,
+          email,
+          password
+        })
+      ).data;
     } catch (error) {
       console.error(error);
     }
@@ -31,7 +33,7 @@ class AuthApi extends HttpClient {
 
   public check = async (value: string) => {
     try {
-      return await this.instance.get(`/check/${value}`);
+      return (await this.instance.get(`/check/${value}`)).data;
     } catch (error) {
       console.error(error);
     }

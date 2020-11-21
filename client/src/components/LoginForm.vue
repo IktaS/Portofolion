@@ -89,7 +89,7 @@ export default class LoginForm extends Vue {
   private onUsernameChanged(value: string) {
     if (!value) return;
     AuthApi.check(value).then(value => {
-      if (value?.data.message !== undefined) {
+      if (value.message !== undefined) {
         this.usernameExist = true;
         this.usernameErrors = [];
       } else {

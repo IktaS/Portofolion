@@ -1,27 +1,33 @@
 <template>
   <div class="home">
     <h1>This is A Home page</h1>
-    <h1>{{ todo.title }}</h1>
+    <h1>{{ user.username }}</h1>
   </div>
 </template>
 
 <script lang="ts">
-import TodoService from "@/services/TodoService";
-import Todo, { emptyTodo } from "@/types/TodoType";
+import router from "@/router";
+import UserService from "@/services/UserService";
+import User, { emptyUser } from "@/types/UserType";
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   components: {}
 })
 export default class Home extends Vue {
-  private todo: Todo = emptyTodo;
+  private user: User = emptyUser;
 
-  async initTodo() {
-    this.todo = (await TodoService.getTodo("1")).data;
+  async initUser() {
+    const user = await UserService.getHome();
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    this.user = user;
   }
 
   mounted() {
-    this.initTodo();
+    this.initUser();
   }
 }
 </script>

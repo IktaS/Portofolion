@@ -129,14 +129,14 @@ export default class SignUpForm extends Vue {
       return;
     }
     propagateEvent(this, "callSnackbar", "Successfully registered!");
-    router.push("/");
+    router.push("/login");
   }
 
   @Watch("username")
   private onUsernameChanged(value: string) {
     if (!value) return;
     AuthApi.check(value).then(value => {
-      if (value?.data.message !== undefined) {
+      if (value.message !== undefined) {
         this.usernameExist = true;
         this.usernameErrors = ["Username exist"];
       } else {
@@ -150,7 +150,7 @@ export default class SignUpForm extends Vue {
   private onEmailChanged(value: string) {
     if (!value) return;
     AuthApi.check(value).then(value => {
-      if (value?.data.message !== undefined) {
+      if (value.message !== undefined) {
         this.emailExist = true;
         this.emailErrors = ["Email exist"];
       } else {
