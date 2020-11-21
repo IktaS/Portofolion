@@ -7,7 +7,13 @@ class AuthApi extends HttpClient {
 
   public login = async (username: string, password: string) => {
     try {
-      return (await this.instance.post("/login", { username, password })).data;
+      return (
+        await this.instance.post(
+          "/login",
+          { username, password },
+          { withCredentials: true }
+        )
+      ).data;
     } catch (error) {
       console.error(error);
     }
