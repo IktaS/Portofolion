@@ -16,7 +16,6 @@ class UserApi extends HttpClient {
 
   public getHome = async () => {
     try {
-      console.log("called");
       return (
         await this.instance.get<User>(`/dashboard`, { withCredentials: true })
       ).data;

@@ -23,6 +23,7 @@
       <div class="navbutton" v-if="!$vuetify.breakpoint.mobile && isLoggedOn">
         <v-menu bottom offset-y>
           <template v-slot:activator="{ on, attrs }">
+            <v-avatar color="primary" size="56"></v-avatar>
             <v-btn elevation="0" class="px-13" v-bind="attrs" v-on="on">
               {{ user.username }}
             </v-btn>
