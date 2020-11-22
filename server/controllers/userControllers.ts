@@ -15,7 +15,7 @@ export default class UserController {
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email,
-			githubKey: null,
+			githubToken: null,
 		});
 		newUser.save((err) => {
 			if (err) throw err;
@@ -38,7 +38,7 @@ export default class UserController {
 			res.status(204).send();
 			return;
 		}
-		user.githubKey = req.body.githubKey;
+		user.githubToken = req.body.githubToken;
 		user.save();
 		res.status(200).send();
 	}

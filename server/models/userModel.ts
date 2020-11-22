@@ -5,14 +5,14 @@ export interface IUser extends Document {
 	username: string;
 	password: string;
 	email: string;
-	githubKey: string | null;
+	githubToken: string | null;
 }
 
 export const userSchema: Schema = new Schema({
 	username: String,
 	password: String,
 	email: String,
-	githubKey: String,
+	githubToken: String,
 });
 
 userSchema.pre<IUser>("save", function save(next) {
