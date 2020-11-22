@@ -8,6 +8,7 @@
 <script lang="ts">
 import router from "@/router";
 import UserService from "@/services/UserService";
+import { vxm } from "@/store/store.vuex";
 import User, { emptyUser } from "@/types/UserType";
 import { Component, Vue } from "vue-property-decorator";
 
@@ -20,6 +21,7 @@ export default class Home extends Vue {
   async initUser() {
     const user = await UserService.getHome();
     if (!user) {
+      vxm.user.clearUser();
       router.push("/login");
       return;
     }

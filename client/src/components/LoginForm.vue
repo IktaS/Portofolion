@@ -54,7 +54,6 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
-import AuthApi from "@/services/AuthService";
 import UserApi from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
 
@@ -77,14 +76,8 @@ export default class LoginForm extends Vue {
       form.validate();
       return;
     }
-    try {
-      AuthApi.login(this.username, this.password);
-    } catch (error) {
-      vxm.event.showSnackbar("Something Went Wrong");
-      return;
-    }
-    vxm.event.showSnackbar("Successfully Logged In!");
-    router.push("/dashboard");
+    vxm.user.login({ username: this.username, password: this.password });
+    setTimeout(() => router.push("/dashboard"), 1000);
   }
 
   @Watch("username")
