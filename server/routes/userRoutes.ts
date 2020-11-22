@@ -14,16 +14,8 @@ export default class UserRoutes {
 	}
 
 	private routes(): void {
-		this.router.post("/register", this.authController.lockIfAuthenticated, this.userController.registerUser);
-		this.router.post("/login", this.authController.lockIfAuthenticated, passport.authenticate("local"), function (
-			req,
-			res,
-			next
-		) {
-			res.status(200).send();
-		});
 		this.router.get("/dashboard",this.authController.lockIfNotAuthenticated, this.userController.getDashboard);
-		this.router.get("/check/:value", this.userController.checkUser)
-		this.router.get("/user/:username", this.userController.getUser);
+		this.router.get("/check/:value", this.userController.checkUser);
+		this.router.get("/:username", this.userController.getUser);
 	}
 }

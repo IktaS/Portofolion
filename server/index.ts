@@ -9,6 +9,7 @@ import UserRoutes from "./routes/userRoutes";
 import expressSession from "./services/session/session";
 import Passport from "./services/auth/passportHandler";
 import passport from "passport";
+import AuthRoutes from "./routes/authRoutes";
 
 class Server {
 	public app: express.Application;
@@ -43,6 +44,7 @@ class Server {
 	}
 
 	private routes(): void {
+		this.app.use("/api/v1/auth", new AuthRoutes().router);
 		this.app.use("/api/v1/users", new UserRoutes().router);
 	}
 }
