@@ -84,6 +84,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
 import AuthApi from "@/services/AuthService";
+import UserApi from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
 
 @Component
@@ -135,7 +136,7 @@ export default class SignUpForm extends Vue {
   @Watch("username")
   private onUsernameChanged(value: string) {
     if (!value) return;
-    AuthApi.check(value).then(value => {
+    UserApi.check(value).then(value => {
       if (value.message !== undefined) {
         this.usernameExist = true;
         this.usernameErrors = ["Username exist"];
@@ -149,7 +150,7 @@ export default class SignUpForm extends Vue {
   @Watch("email")
   private onEmailChanged(value: string) {
     if (!value) return;
-    AuthApi.check(value).then(value => {
+    UserApi.check(value).then(value => {
       if (value.message !== undefined) {
         this.emailExist = true;
         this.emailErrors = ["Email exist"];

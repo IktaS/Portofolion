@@ -2,7 +2,7 @@ import HttpClient from "./http-client";
 
 class AuthApi extends HttpClient {
   public constructor() {
-    super("http://localhost:4000/api/v1/users/");
+    super("http://localhost:4000/api/v1/auth/");
   }
 
   public login = async (username: string, password: string) => {
@@ -37,9 +37,9 @@ class AuthApi extends HttpClient {
     }
   };
 
-  public check = async (value: string) => {
+  public logout = async () => {
     try {
-      return (await this.instance.get(`/check/${value}`)).data;
+      await this.instance.get("/logout", { withCredentials: true });
     } catch (error) {
       console.error(error);
     }
