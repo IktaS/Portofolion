@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <NavBar />
-    <v-main @callSnackbar="callSnackbar">
+    <v-main>
       <router-view></router-view>
-      <pop-up-snack-bar ref="snackbar" :snackbar="snackbar" :text="text" />
+      <pop-up-snack-bar :snackbar="snackbar.show" :text="snackbar.message" />
     </v-main>
   </v-app>
 </template>
@@ -12,6 +12,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import NavBar from "@/components/NavBar.vue";
 import PopUpSnackBar from "@/components/PopUpSnackBar.vue";
+import { vxm } from "@/store/store.vuex";
 
 @Component({
   name: "App",
@@ -21,14 +22,8 @@ import PopUpSnackBar from "@/components/PopUpSnackBar.vue";
   }
 })
 export default class App extends Vue {
-  private snackbar = false;
-  private text = "";
-
-  public callSnackbar(value: string) {
-    this.snackbar = true;
-    this.text = value;
-
-    setTimeout(() => (this.snackbar = false), 2000);
+  get snackbar() {
+    return vxm.event.snackbar;
   }
 }
 </script>

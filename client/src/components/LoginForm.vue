@@ -54,8 +54,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
-import { propagateEvent } from "@/utils/eventsUtil";
 import AuthApi from "@/services/AuthService";
+import { vxm } from "@/store/store.vuex";
 
 @Component
 export default class LoginForm extends Vue {
@@ -79,9 +79,10 @@ export default class LoginForm extends Vue {
     try {
       AuthApi.login(this.username, this.password);
     } catch (error) {
-      propagateEvent(this, "callSnackbar", "Something went wrong");
+      vxm.event.showSnackbar("Something Went Wrong");
       return;
     }
+    vxm.event.showSnackbar("Successfully Logged In!");
     router.push("/dashboard");
   }
 
