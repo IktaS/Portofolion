@@ -3,11 +3,9 @@ import mongoose from 'mongoose'
 
 export default class MongoDriver implements DatabaseDriver {
     private URI : string;
-    private Secret : string;
 
-    constructor(URI:string, Secret:string){
+    constructor(URI:string){
         this.URI = URI;
-        this.Secret = Secret;
     }
 
     connect(){

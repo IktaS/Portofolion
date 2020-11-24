@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 4000;
 import cors from "cors";
 import morgan from "morgan";
 import DatabaseDriver from "./services/db/db";
-import { dbAddress, dbSecret } from "./secrets";
+import { dbURI } from "./db.config";
 import MongoDriver from "./services/db/mongoDB";
 import UserRoutes from "./routes/userRoutes";
 import expressSession from "./services/session/session";
@@ -18,7 +18,7 @@ class Server {
 
 	constructor() {
 		this.app = express();
-		this.db = new MongoDriver(dbAddress, dbSecret);
+		this.db = new MongoDriver(dbURI);
 		this.passport = new Passport();
 		this.config();
 		this.db.connect();

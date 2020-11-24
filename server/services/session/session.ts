@@ -1,9 +1,9 @@
 import session from "express-session";
-import { sessSecret } from "../../secrets";
+import { session_secret } from "../../session.config";
 import sessionStore from "./sessionStore";
 
 const expressSession = session({
-	secret: sessSecret,
+	secret: session_secret,
 	store: sessionStore,
 	resave: true,
 	saveUninitialized: false,

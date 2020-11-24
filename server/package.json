@@ -4,8 +4,8 @@
   "description": "portofolion serverside codes",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon index.ts",
-    "build": "tsc --project ./"
+    "start": "nodemon -r dotenv/config index.ts",
+    "build": "rm -rf ./build; tsc --project ./"
   },
   "keywords": [
     "express",
@@ -36,6 +36,7 @@
     "@types/node": "^14.14.9",
     "@types/passport": "^1.0.4",
     "@types/passport-local": "^1.0.33",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2"
