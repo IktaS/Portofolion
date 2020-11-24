@@ -1,7 +1,6 @@
 FROM node:lts
 
 ENV NODE_ENV=production
-EXPOSE 4000
 
 RUN mkdir -p /server
 
