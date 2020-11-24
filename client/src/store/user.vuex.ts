@@ -14,7 +14,6 @@ interface LoginInfo {
 }
 
 export class UserStore extends VuexModule {
-  public isLoggedOn = false;
   public user: User = emptyUser;
 
   @mutation setUser(user: User) {
@@ -22,18 +21,15 @@ export class UserStore extends VuexModule {
   }
 
   @mutation clearUser() {
-    this.isLoggedOn = false;
     this.user = emptyUser;
   }
 
   @action async login(payload: LoginInfo) {
     try {
       const res = await AuthApi.login(payload.username, payload.username);
-      this.isLoggedOn = true;
       this.user = res;
       vxm.event.showSnackbar("Successfully Logged In!");
     } catch (error) {
-      this.isLoggedOn = false;
       this.user = emptyUser;
       vxm.event.showSnackbar("Something went wrong");
     }
@@ -42,7 +38,6 @@ export class UserStore extends VuexModule {
   @action async logout() {
     try {
       await AuthApi.logout();
-      this.isLoggedOn = false;
       this.user = emptyUser;
     } catch (error) {
       console.error(error);

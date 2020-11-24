@@ -9,14 +9,15 @@
 import router from "@/router";
 import UserService from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
-import User, { emptyUser } from "@/types/UserType";
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   components: {}
 })
 export default class Home extends Vue {
-  private user: User = emptyUser;
+  get user() {
+    return vxm.user.user;
+  }
 
   async initUser() {
     const user = await UserService.getHome();
@@ -25,7 +26,7 @@ export default class Home extends Vue {
       router.push("/login");
       return;
     }
-    this.user = user;
+    vxm.user.setUser(user);
   }
 
   mounted() {
