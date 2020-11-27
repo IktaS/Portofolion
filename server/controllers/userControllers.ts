@@ -15,9 +15,13 @@ export default class UserController {
 		}
 
 		let newUser = new User({
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+			description: "",
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email,
+			img: null,
 			githubToken: null,
 		});
 		newUser.save((err) => {
@@ -43,6 +47,7 @@ export default class UserController {
 		}
 		if (req.body.firstName != undefined) user.firstName = req.body.firstName;
 		if (req.body.lastName != undefined) user.lastName = req.body.lastName;
+		if (req.body.description != undefined) user.description = req.body.description;
 		if (req.body.username != undefined) user.username = req.body.username;
 		if (req.body.email != undefined) user.email = req.body.email;
 		if (req.body.password != undefined) user.password = req.body.password;

@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 export interface IUser extends Document {
 	firstName: string;
 	lastName: string;
+	description: string;
 	username: string;
 	password: string;
 	email: string;
@@ -15,11 +16,12 @@ export interface IUser extends Document {
 export const userSchema: Schema = new Schema({
 	firstName: String,
 	lastName: String,
+	description: String,
 	username: String,
 	password: String,
 	email: String,
 	githubToken: String,
-	profilePicture: imageSchema
+	profilePicture: imageSchema,
 });
 
 userSchema.pre<IUser>("save", function save(next) {
