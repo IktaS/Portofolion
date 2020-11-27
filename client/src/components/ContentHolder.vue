@@ -2,7 +2,7 @@
   <v-container>
     <v-row align="center">
       <v-col md="8" offset-md="2">
-        <v-card class="content">
+        <v-card class="content" elevation="1">
           <slot></slot>
         </v-card>
       </v-col>

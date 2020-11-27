@@ -1,7 +1,49 @@
 <template>
   <div class="home">
     <content-holder>
-      <h1>This is the Dashboard</h1>
+      <v-container>
+        <v-row>
+          <v-col cols="4" align="center">
+            <v-avatar color="primary" size="256"></v-avatar>
+          </v-col>
+          <v-col>
+            <v-row align="start">
+              <v-col>
+                <v-text-field
+                  v-model="firstName"
+                  label="First Name"
+                  clearable
+                ></v-text-field>
+              </v-col>
+              <v-col>
+                <v-text-field
+                  v-model="lastName"
+                  label="Last Name"
+                  clearable
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-textarea
+                clearable
+                clear-icon="mdi-close-circle"
+                label="Describe yourself!"
+                value="Description of yourself"
+              ></v-textarea>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col align="center">
+            <h1>Template text</h1>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col align="center">
+            <h1>Template text two</h1>
+          </v-col>
+        </v-row>
+      </v-container>
     </content-holder>
   </div>
 </template>

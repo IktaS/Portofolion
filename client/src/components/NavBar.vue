@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <v-app-bar app dense elevation="3">
+    <v-app-bar app dense elevation="2">
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-app-bar-nav-icon
         v-if="$vuetify.breakpoint.mobile"
@@ -26,7 +26,6 @@
         <v-menu bottom offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn elevation="0" class="px-6" v-bind="attrs" v-on="on">
-              <v-avatar color="primary" size="35"></v-avatar>
               <v-spacer />
               {{ user.username }}
             </v-btn>
