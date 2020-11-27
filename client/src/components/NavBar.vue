@@ -1,21 +1,20 @@
 <template>
   <div class="navbar">
-    <v-app-bar app dense>
+    <v-app-bar app dense elevation="3">
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-app-bar-nav-icon
         v-if="$vuetify.breakpoint.mobile"
         @click="drawer = true"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>Portofolion</v-toolbar-title>
+      <v-toolbar-title>
+        <button class="Logo" @click="Home">
+          Portofolion
+        </button>
+      </v-toolbar-title>
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
-      <v-spacer v-if="!$vuetify.breakpoint.mobile" />
-      <v-spacer v-if="!$vuetify.breakpoint.mobile" />
-      <div
-        class="navbutton"
-        v-if="!$vuetify.breakpoint.mobile && user.username === ''"
-      >
+      <div class="navbutton" v-if="!$vuetify.breakpoint.mobile && !isLoggedIn">
         <v-btn depressed class="px-5">
           About
         </v-btn>
@@ -23,13 +22,10 @@
           Login
         </v-btn>
       </div>
-      <div
-        class="navbutton"
-        v-if="!$vuetify.breakpoint.mobile && user.username !== ''"
-      >
+      <div class="navbutton" v-if="!$vuetify.breakpoint.mobile && isLoggedIn">
         <v-menu bottom offset-y>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn elevation="0" class="px-13" v-bind="attrs" v-on="on">
+            <v-btn elevation="0" class="px-6" v-bind="attrs" v-on="on">
               <v-avatar color="primary" size="35"></v-avatar>
               <v-spacer />
               {{ user.username }}
@@ -48,7 +44,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
       <v-list nav dense>
-        <v-list-item-group v-if="user.username === ''">
+        <v-list-item-group v-if="!isLoggedIn">
           <v-list-item>
             <v-list-item-title>About</v-list-item-title>
           </v-list-item>
@@ -58,7 +54,7 @@
             </v-btn>
           </v-list-item>
         </v-list-item-group>
-        <v-list-item-group v-if="user.username !== ''">
+        <v-list-item-group v-if="isLoggedIn">
           <v-list-item inactive>
             <v-list-item-title>{{ user.username }}</v-list-item-title>
           </v-list-item>
@@ -74,7 +70,9 @@
 </template>
 
 <script lang="ts">
+import router from "@/router";
 import { vxm } from "@/store/store.vuex";
+import { emptyUser } from "@/types/UserType";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 
@@ -84,6 +82,14 @@ export default class NavBar extends Vue {
   private group = null;
   private menu = false;
 
+  get isLoggedIn() {
+    if (this.user !== emptyUser) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   get user() {
     return vxm.user.user;
   }
@@ -91,6 +97,12 @@ export default class NavBar extends Vue {
   public logout() {
     vxm.user.logout();
     window.location.reload();
+  }
+
+  public Home() {
+    router.push("/about").catch(() => {
+      return null;
+    });
   }
 }
 </script>
