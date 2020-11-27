@@ -9,6 +9,28 @@
         </v-row>
         <v-row justify="center">
           <v-col cols="11">
+            <v-row dense>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="firstName"
+                  label="First Name"
+                  outlined
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  v-model="lastName"
+                  label="Last Name"
+                  outlined
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="11">
             <v-text-field
               v-model="username"
               :rules="usernameRules"
@@ -108,6 +130,9 @@ export default class SignUpForm extends Vue {
   private emailExist = true;
   private emailErrors: string[] = [];
 
+  private firstName = "";
+  private lastName = "";
+
   private dialogData = {
     isOn: false,
     color: "primary",
@@ -124,7 +149,13 @@ export default class SignUpForm extends Vue {
       return;
     }
     try {
-      await AuthApi.register(this.username, this.email, this.password);
+      await AuthApi.register(
+        this.firstName,
+        this.lastName,
+        this.username,
+        this.email,
+        this.password
+      );
     } catch (error) {
       vxm.event.showSnackbar("Something went wrong!");
       return;

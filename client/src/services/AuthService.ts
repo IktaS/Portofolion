@@ -20,6 +20,8 @@ class AuthApi extends HttpClient {
   };
 
   public register = async (
+    firstName: string,
+    lastName: string,
     username: string,
     email: string,
     password: string
