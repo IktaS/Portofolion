@@ -1,18 +1,25 @@
 import { Document, Schema, Model, model, Error } from "mongoose";
+import { imageSchema } from "./imageModel";
 import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
+	firstName: string;
+	lastName: string;
 	username: string;
 	password: string;
 	email: string;
 	githubToken: string | null;
+	profilePicture: any;
 }
 
 export const userSchema: Schema = new Schema({
+	firstName: String,
+	lastName: String,
 	username: String,
 	password: String,
 	email: String,
 	githubToken: String,
+	profilePicture: imageSchema
 });
 
 userSchema.pre<IUser>("save", function save(next) {
