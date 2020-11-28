@@ -14,6 +14,27 @@ class UserApi extends HttpClient {
     }
   };
 
+  public updateUser = async (user: User) => {
+    try {
+      return await this.instance.patch<User>("/update/updateProfile", user, {
+        withCredentials: true
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public updateUserPicture = async (data: FormData) => {
+    try {
+      return await this.instance.patch<User>("/update/updatePicture", data, {
+        withCredentials: true
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   public getHome = async () => {
     try {
       return (

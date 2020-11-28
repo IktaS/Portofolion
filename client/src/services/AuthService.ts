@@ -29,6 +29,8 @@ class AuthApi extends HttpClient {
     try {
       return (
         await this.instance.post(`/register`, {
+          firstName,
+          lastName,
           username,
           email,
           password
