@@ -11,3 +11,22 @@ export const propagateEvent = function(
     vm = vm.$parent;
   }
 };
+
+export class Debounce {
+  private time: number;
+  private callback: Function;
+  private _pending = 0;
+
+  constructor(callback: Function, time: number) {
+    this.time = time;
+    this.callback = callback;
+  }
+
+  public trigger(obj: unknown) {
+    clearTimeout(this._pending);
+
+    this._pending = setTimeout(() => {
+      this.callback(obj);
+    }, this.time);
+  }
+}

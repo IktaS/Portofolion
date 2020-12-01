@@ -56,6 +56,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import router from "@/router";
 import UserApi from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
+import { Debounce } from "@/utils/eventsUtil";
 
 @Component
 export default class LoginForm extends Vue {
@@ -65,6 +66,21 @@ export default class LoginForm extends Vue {
   private usernameRules = [(v: string) => !!v || "Username is required"];
   private usernameExist = true;
   private usernameErrors: string[] = [];
+
+  private checkUsername(value: string) {
+    if (!value) return;
+    UserApi.check(value).then(value => {
+      if (value.message !== undefined) {
+        this.usernameExist = true;
+        this.usernameErrors = [];
+      } else {
+        this.usernameExist = false;
+        this.usernameErrors = ["Username does not exist"];
+      }
+    });
+  }
+
+  private usernameDebouncer = new Debounce(this.checkUsername, 300);
 
   private password = "";
   private show = false;
@@ -82,16 +98,7 @@ export default class LoginForm extends Vue {
 
   @Watch("username")
   private onUsernameChanged(value: string) {
-    if (!value) return;
-    UserApi.check(value).then(value => {
-      if (value.message !== undefined) {
-        this.usernameExist = true;
-        this.usernameErrors = [];
-      } else {
-        this.usernameExist = false;
-        this.usernameErrors = ["Username does not exist"];
-      }
-    });
+    this.usernameDebouncer.trigger(value);
   }
 }
 </script>

@@ -108,17 +108,47 @@ import router from "@/router";
 import AuthApi from "@/services/AuthService";
 import UserApi from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
+import { Debounce } from "@/utils/eventsUtil";
 
 @Component
 export default class SignUpForm extends Vue {
   private valid = null;
+
   private username = "";
   private usernameRules = [(v: string) => !!v || "Username is required"];
+  private checkUsername(value: string) {
+    if (!value) return;
+    UserApi.check(value).then(value => {
+      if (value.message !== undefined) {
+        this.usernameExist = true;
+        this.usernameErrors = ["Username exist"];
+      } else {
+        this.usernameExist = false;
+        this.usernameErrors = [];
+      }
+    });
+  }
+  private usernameDebouncer = new Debounce(this.checkUsername, 300);
+
   private email = "";
   private emailRules = [
     (v: string) => !!v || "E-mail is required",
     (v: string) => /.+@.+\..+/.test(v) || "Must be a valid e-mail"
   ];
+  private checkEmail(value: string) {
+    if (!value) return;
+    UserApi.check(value).then(value => {
+      if (value.message !== undefined) {
+        this.emailExist = true;
+        this.emailErrors = ["Email exist"];
+      } else {
+        this.emailExist = false;
+        this.emailErrors = [];
+      }
+    });
+  }
+  private emailDebouncer = new Debounce(this.checkEmail, 300);
+
   private password = "";
   private show1 = false;
   private passwordRules = [(v: string) => !!v || "Password is required"];
@@ -166,30 +196,12 @@ export default class SignUpForm extends Vue {
 
   @Watch("username")
   private onUsernameChanged(value: string) {
-    if (!value) return;
-    UserApi.check(value).then(value => {
-      if (value.message !== undefined) {
-        this.usernameExist = true;
-        this.usernameErrors = ["Username exist"];
-      } else {
-        this.usernameExist = false;
-        this.usernameErrors = [];
-      }
-    });
+    this.emailDebouncer.trigger(value);
   }
 
   @Watch("email")
   private onEmailChanged(value: string) {
-    if (!value) return;
-    UserApi.check(value).then(value => {
-      if (value.message !== undefined) {
-        this.emailExist = true;
-        this.emailErrors = ["Email exist"];
-      } else {
-        this.emailExist = false;
-        this.emailErrors = [];
-      }
-    });
+    this.emailDebouncer.trigger(value);
   }
 }
 </script>
