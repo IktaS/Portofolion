@@ -66,14 +66,24 @@
         </v-row>
         <v-row>
           <v-col align="center">
-            <h1>Template text</h1>
+            <v-btn>
+              <v-icon>mdi-github</v-icon>
+              Connect my Github Account
+            </v-btn>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col align="center">
-            <h1>Template text two</h1>
-          </v-col>
-        </v-row>
+        <div v-if="user.githubToken != null">
+          <v-row>
+            <v-col align="center">
+              <h1>Template Text</h1>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col align="center">
+              <h1>Template text two</h1>
+            </v-col>
+          </v-row>
+        </div>
       </v-container>
     </content-holder>
   </div>
@@ -86,6 +96,7 @@ import ContentHolder from "@/components/ContentHolder.vue";
 import { vxm } from "@/store/store.vuex";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User, { emptyUser } from "@/types/UserType";
+import { Debounce } from "@/utils/eventsUtil";
 
 @Component({
   components: {
@@ -96,6 +107,15 @@ export default class Dashboard extends Vue {
   //eslint-disable-next-line
   private picture: any = undefined;
   private user: User = emptyUser;
+  public updateUser(newUser: User) {
+    try {
+      UserService.updateUser(newUser);
+      vxm.user.setUser(newUser);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  private userDebouncer = new Debounce(this.updateUser, 300);
 
   async initUser() {
     const user = await UserService.getHome();
@@ -113,12 +133,7 @@ export default class Dashboard extends Vue {
   }
   @Watch("user", { deep: true })
   private onUserValueChanged(newUser: User) {
-    try {
-      UserService.updateUser(newUser);
-      vxm.user.setUser(newUser);
-    } catch (error) {
-      console.log(error);
-    }
+    this.userDebouncer.trigger(newUser);
   }
 
   // eslint-disable-next-line
