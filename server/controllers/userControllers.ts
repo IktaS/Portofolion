@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { fstat } from "fs";
-import { IUser, User } from "../models/userModel";
+import { prepareUser, User } from "../models/userModel";
 import fs from "fs";
 import path from "path";
+import githubService from "../services/http-client/githubService";
 
 export default class UserController {
 	public async registerUser(req: Request, res: Response): Promise<void> {
@@ -31,12 +31,39 @@ export default class UserController {
 	}
 
 	public async getUser(req: Request, res: Response): Promise<void> {
-		const user = await User.findOne({ username: req.params.username });
+		let user = await User.findOne({ username: req.params.username });
 		if (!user) {
 			res.status(204).send();
+			return;
 		}
-		let filtered = (user as any).filterPassword();
-		res.status(200).json(filtered);
+		user = await prepareUser(user);
+		res.status(200).json(user);
+	}
+
+	public async testUser(req: Request, res: Response): Promise<void> {
+		let user = await User.findOne({ username: req.params.username });
+		if (!user) {
+			res.status(204).send();
+			return;
+		}
+		user = await prepareUser(user);
+		res.status(200).json(user);
+	}
+
+	public async updateGithubToken(req: Request, res: Response): Promise<void> {
+		let user = req.user;
+		if (!user) {
+			res.status(400).send();
+			return;
+		}
+		if (!req.body.code) {
+			res.status(400).send();
+			return;
+		}
+		const token = await githubService.exchangeToken(req.body.code);
+		user.githubToken = token;
+		user.save();
+		res.status(200).send();
 	}
 
 	public async updateProfile(req: Request, res: Response): Promise<void> {
@@ -47,7 +74,8 @@ export default class UserController {
 		}
 		if (req.body.firstName != undefined) user.firstName = req.body.firstName;
 		if (req.body.lastName != undefined) user.lastName = req.body.lastName;
-		if (req.body.description != undefined) user.description = req.body.description;
+		if (req.body.description != undefined)
+			user.description = req.body.description;
 		if (req.body.username != undefined) user.username = req.body.username;
 		if (req.body.email != undefined) user.email = req.body.email;
 		if (req.body.password != undefined) user.password = req.body.password;
@@ -79,11 +107,12 @@ export default class UserController {
 	}
 
 	public async getDashboard(req: Request, res: Response): Promise<void> {
-		if (!req.user) {
+		let user = req.user;
+		if (!user) {
 			res.status(401).send();
 			return;
 		}
-		let user = (req.user as any).filterPassword();
+		user = await prepareUser(user);
 		res.send(user);
 	}
 
