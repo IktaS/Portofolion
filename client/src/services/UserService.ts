@@ -52,6 +52,19 @@ class UserApi extends HttpClient {
       console.error(error);
     }
   };
+
+  public saveToken = async (code: string) => {
+    try {
+      const data = {
+        code: code
+      };
+      return await this.instance.patch("/update/updateToken", data, {
+        withCredentials: true
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 }
 
 export default new UserApi();

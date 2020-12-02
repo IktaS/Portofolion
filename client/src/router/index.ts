@@ -4,10 +4,16 @@ import Dashboard from "@/views/Dashboard.vue";
 import Login from "@/views/Login.vue";
 import About from "@/views/About.vue";
 import SignUp from "@/views/SignUp.vue";
+import OAuthRedirect from "@/components/oauth/oauthRedirect.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
+  {
+    path: "/oauth/redirect",
+    name: "redirectOauth",
+    component: OAuthRedirect
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -34,6 +40,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes
 });
 

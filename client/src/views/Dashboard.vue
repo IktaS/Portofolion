@@ -64,15 +64,15 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="user.repos == null">
           <v-col align="center">
-            <v-btn>
+            <v-btn :href="oauthLink">
               <v-icon>mdi-github</v-icon>
               Connect my Github Account
             </v-btn>
           </v-col>
         </v-row>
-        <div v-if="user.githubToken != null">
+        <div v-if="user.repos != null">
           <v-row>
             <v-col align="center">
               <h1>Template Text</h1>
@@ -107,6 +107,7 @@ export default class Dashboard extends Vue {
   //eslint-disable-next-line
   private picture: any = undefined;
   private user: User = emptyUser;
+  private oauthLink = `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&redirect_uri=http://localhost:8081/oauth/redirect&scope=repo`;
   public updateUser(newUser: User) {
     try {
       UserService.updateUser(newUser);
