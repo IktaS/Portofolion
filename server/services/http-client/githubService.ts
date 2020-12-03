@@ -43,12 +43,20 @@ class GithubApi extends HttpClient {
 				return event.type == "PushEvent";
 			});
 
-			let latestRepos: any[] = [];
+			let latestPushesRepo: any[] = [];
 
 			events.forEach((event: any) => {
-				latestRepos.push(event.repo);
+				latestPushesRepo.push(event.repo);
 			});
 
+			const flags = new Set();
+			const latestRepos = latestPushesRepo.filter(repo  => {
+				if(flags.has(repo.name)){
+					return false;
+				}
+				flags.add(repo.name);
+				return true;
+			})
 			return latestRepos;
 		} catch (error) {
 			console.log(error);
