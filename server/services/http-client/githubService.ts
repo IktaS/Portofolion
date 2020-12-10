@@ -1,9 +1,32 @@
 import Axios from "axios";
 import HttpClient from "./http-client";
 
+interface githubRepoData {
+	name:string;
+	url:string;
+	description:string;
+};
+
+const emptyGithubRepoData:githubRepoData = {
+	name: "",
+	url: "",
+	description: "",
+};
 class GithubApi extends HttpClient {
 	public constructor() {
 		super("");
+	}
+
+	private async prepareRepoData(repo:any, token:string){
+		let repoData:githubRepoData = emptyGithubRepoData;
+		console.log(repo);
+		repoData.name = repo.name;
+		repoData.url = repo.url;
+		let val = (await this.instance.get(repo.url, {
+			headers: { Authorization: "Bearer " + token },
+		})).data;
+		repoData.description = val.description;
+		return repoData;
 	}
 
 	public exchangeToken = async (code: string) => {
@@ -57,7 +80,14 @@ class GithubApi extends HttpClient {
 				flags.add(repo.name);
 				return true;
 			})
-			return latestRepos;
+
+			let repoDatas:githubRepoData[] = new Array();
+			for (const repo of latestRepos){
+				let repoData = await this.prepareRepoData(repo,token);
+				repoDatas.push(repoData);
+			};
+			console.log(repoDatas);
+			return repoDatas;
 		} catch (error) {
 			console.log(error);
 		}

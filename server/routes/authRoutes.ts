@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserController from "../controllers/userControllers";
 import passport from "passport";
 import AuthController from "../controllers/authController";
+import { prepareUser } from "../models/userModel";
 
 export default class AuthRoutes {
 	public router: Router;
@@ -15,12 +16,7 @@ export default class AuthRoutes {
 
 	private routes(): void {
 		this.router.post("/register", this.authController.lockIfAuthenticated, this.userController.registerUser);
-		this.router.post("/login", this.authController.lockIfAuthenticated, passport.authenticate("local"), function (
-			req,
-			res
-		) {
-			res.status(200).json((req.user as any).filterPassword());
-        });
+		this.router.post("/login", this.authController.lockIfAuthenticated, passport.authenticate("local"), this.userController.getDashboard);
         this.router.get("/logout", (req,res) => {
             req.logout();
             res.status(200).send();
