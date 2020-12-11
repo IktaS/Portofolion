@@ -3,7 +3,7 @@ import User from "@/types/UserType";
 
 class UserApi extends HttpClient {
   public constructor() {
-    super(`${process.env.VUE_APP_URL}/api/v1/users/`);
+    super("http://localhost:4000/api/v1/users/");
   }
 
   public getUser = async (id: string) => {
