@@ -17,9 +17,7 @@
                   <v-img
                     contain
                     v-if="user.profilePicture != null"
-                    :src="
-                      `data:${user.profilePicture.img.contentType};base64,${user.profilePicture.img.data}`
-                    "
+                    :src="`data:${user.profilePicture.img.contentType};base64,${user.profilePicture.img.data}`"
                   >
                   </v-img>
                 </v-avatar>
@@ -75,7 +73,7 @@
         <div v-if="user.repos != null">
           <v-row>
             <v-col align="center">
-              <h1>Template Text</h1>
+              <github-card :repoData="this.user.repos[0]"></github-card>
             </v-col>
           </v-row>
           <v-row>
@@ -97,11 +95,14 @@ import { vxm } from "@/store/store.vuex";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User, { emptyUser } from "@/types/UserType";
 import { Debounce } from "@/utils/eventsUtil";
+import GithubCard from "@/components/GithubCard.vue";
+import Repo from "@/types/RepoType";
 
 @Component({
   components: {
-    ContentHolder
-  }
+    ContentHolder,
+    GithubCard,
+  },
 })
 export default class Dashboard extends Vue {
   //eslint-disable-next-line
