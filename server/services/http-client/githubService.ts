@@ -2,12 +2,14 @@ import Axios from "axios";
 import HttpClient from "./http-client";
 
 interface githubRepoData {
+	id:number;
 	name:string;
 	url:string;
 	description:string;
 };
 
 const emptyGithubRepoData:githubRepoData = {
+	id: 0,
 	name: "",
 	url: "",
 	description: "",
@@ -19,7 +21,7 @@ class GithubApi extends HttpClient {
 
 	private async prepareRepoData(repo:any, token:string){
 		let repoData:githubRepoData = emptyGithubRepoData;
-		console.log(repo);
+		repoData.id = repo.id;
 		repoData.name = repo.name;
 		repoData.url = repo.url;
 		let val = (await this.instance.get(repo.url, {
@@ -81,12 +83,12 @@ class GithubApi extends HttpClient {
 				return true;
 			})
 
-			let repoDatas:githubRepoData[] = new Array();
+			let repoDatas:githubRepoData[] = new Array<githubRepoData>();
 			for (const repo of latestRepos){
 				let repoData = await this.prepareRepoData(repo,token);
-				repoDatas.push(repoData);
+				let cloneData = Object.assign({},repoData)
+				repoDatas.push(cloneData);
 			};
-			console.log(repoDatas);
 			return repoDatas;
 		} catch (error) {
 			console.log(error);
