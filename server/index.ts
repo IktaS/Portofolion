@@ -44,8 +44,8 @@ class Server {
 	}
 
 	private routes(): void {
-		this.app.use("/api/v1/auth", new AuthRoutes().router);
-		this.app.use("/api/v1/users", new UserRoutes().router);
+		this.app.use("/v1/auth", new AuthRoutes().router);
+		this.app.use("/v1/users", new UserRoutes().router);
 	}
 }
 
