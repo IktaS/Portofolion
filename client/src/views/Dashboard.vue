@@ -17,7 +17,9 @@
                   <v-img
                     contain
                     v-if="user.profilePicture != null"
-                    :src="`data:${user.profilePicture.img.contentType};base64,${user.profilePicture.img.data}`"
+                    :src="
+                      `data:${user.profilePicture.img.contentType};base64,${user.profilePicture.img.data}`
+                    "
                   >
                   </v-img>
                 </v-avatar>
@@ -73,12 +75,17 @@
         <div v-if="user.repos != null">
           <v-row>
             <v-col align="center">
-              <github-card :repoData="this.user.repos[0]"></github-card>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col align="center">
-              <h1>Template text two</h1>
+              <v-sheet>
+                <v-slide-group class="pa-4">
+                  <v-slide-item
+                    v-for="repo in user.repos"
+                    :key="repo.id"
+                    style="margin: 3px"
+                  >
+                    <github-card :repoData="repo"> </github-card>
+                  </v-slide-item>
+                </v-slide-group>
+              </v-sheet>
             </v-col>
           </v-row>
         </div>
@@ -96,13 +103,11 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import User, { emptyUser } from "@/types/UserType";
 import { Debounce } from "@/utils/eventsUtil";
 import GithubCard from "@/components/GithubCard.vue";
-import Repo from "@/types/RepoType";
-
 @Component({
   components: {
     ContentHolder,
-    GithubCard,
-  },
+    GithubCard
+  }
 })
 export default class Dashboard extends Vue {
   //eslint-disable-next-line
