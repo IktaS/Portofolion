@@ -113,7 +113,7 @@ export default class Dashboard extends Vue {
   //eslint-disable-next-line
   private picture: any = undefined;
   private user: User = emptyUser;
-  private oauthLink = `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&redirect_uri=http://localhost:8081/oauth/redirect&scope=repo`;
+  private oauthLink = `https://github.com/login/oauth/authorize?client_id=${process.env.VUE_APP_CLIENT_ID}&redirect_uri=${process.env.VUE_APP_URL}/oauth/redirect&scope=repo`;
   public updateUser(newUser: User) {
     try {
       UserService.updateUser(newUser);
