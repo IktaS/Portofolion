@@ -1,5 +1,4 @@
 import { Document, Schema, Model, model, Error } from "mongoose";
-import { imageSchema } from "./imageModel";
 import bcrypt from "bcrypt";
 import UserController from "../controllers/userControllers";
 import GithubApi from "../services/http-client/githubService";
@@ -12,7 +11,7 @@ export interface IUser extends Document {
 	password: string;
 	email: string;
 	githubToken: string | null;
-	profilePicture: any;
+	profilePicture: string;
 }
 
 export const userSchema: Schema = new Schema({
@@ -23,7 +22,7 @@ export const userSchema: Schema = new Schema({
 	password: String,
 	email: String,
 	githubToken: String,
-	profilePicture: imageSchema,
+	profilePicture: String,
 });
 
 userSchema.pre<IUser>("save", function save(next) {
@@ -99,23 +98,10 @@ export const filterVersion = function (obj: IUser) {
 	return filtered;
 };
 
-export const populateRepo = async function (obj: IUser) {
-	const token = obj.githubToken;
-	let user = obj.toObject();
-	if (!token) {
-		console.error("No token");
-		user.repos = null;
-		return user;
-	}
-	user.repos = await GithubApi.getRepos(token);
-	return user;
-};
-
 export const prepareUser = async function (obj: IUser) {
 	let user = obj as any;
-	user = await populateRepo(user);
+	user.repos = `${process.env.APP_URL}/users/${obj.username}/repos`;
 	user = filterId(user);
-	user.profilePicture = filterId(user.profilePicture);
 	user = filterVersion(user);
 	user = filterPassword(user);
 	user = filterToken(user);

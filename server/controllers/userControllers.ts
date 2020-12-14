@@ -91,19 +91,49 @@ export default class UserController {
 			res.status(400).send("No user");
 			return;
 		}
-		const img = {
-			img: {
-				data: fs.readFileSync(
-					path.join(__dirname, "..", "uploads", req.file.filename)
-				),
-				contentType: "image/png",
-			},
-		};
-		user.profilePicture = img;
+		user.profilePicture = req.file.filename;
 		user.save((err) => {
 			if (err) res.status(400).send(err);
 			res.status(200).send();
 		});
+	}
+
+	public async getPicture(req: Request, res: Response): Promise<void> {
+		let user = req.user;
+		if (!user) {
+			res.status(400).send("No user");
+			return;
+		}
+		let userData = await User.findOne({ username: req.params.username });
+		if (!userData) {
+			res.status(204).send();
+			return;
+		}
+		const img = {
+			img: {
+				data: fs.readFileSync(
+					path.join(__dirname, "..", "uploads", userData.profilePicture)
+				),
+				contentType: "image/png",
+			},
+		};
+		res.json(img).send();
+	}
+
+	public async getRepos(req: Request, res: Response): Promise<void> {
+		let user = req.user;
+		if (!user) {
+			res.status(400).send("No user");
+			return;
+		}
+		let userData = await User.findOne({ username: req.params.username });
+		if (!userData || !userData.githubToken) {
+			res.status(204).send();
+			return;
+		}
+
+		let repos = githubService.getRepos(userData.githubToken);
+		res.json(repos).send();
 	}
 
 	public async getDashboard(req: Request, res: Response): Promise<void> {

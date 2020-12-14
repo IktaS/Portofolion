@@ -22,6 +22,8 @@ export default class UserRoutes {
 		);
 		this.router.get("/check/:value", this.userController.checkUser);
 		this.router.get("/:username", this.userController.getUser);
+		this.router.get("/:username/img", this.userController.getPicture);
+		this.router.get("/:username/repos", this.userController.getRepos);
 		this.router.get("/test/:username", this.userController.testUser);
 		this.router.patch(
 			"/update/updateProfile",
