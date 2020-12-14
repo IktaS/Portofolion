@@ -21,8 +21,9 @@ export default class UserController {
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email,
-			img: null,
-			githubToken: null,
+			img: "",
+			githubToken: "",
+			repoVisibility: null,
 		});
 		newUser.save((err) => {
 			if (err) res.status(400).send(err);
@@ -92,6 +93,23 @@ export default class UserController {
 			return;
 		}
 		user.profilePicture = req.file.filename;
+		user.save((err) => {
+			if (err) res.status(400).send(err);
+			res.status(200).send();
+		});
+	}
+
+	public async updateRepoVisibility(
+		req: Request,
+		res: Response
+	): Promise<void> {
+		let user = req.user;
+		if (!user) {
+			res.status(400).send();
+			return;
+		}
+		if (req.body.repoVisibility != undefined)
+			user.repoVisibility = req.body.repoVisibility;
 		user.save((err) => {
 			if (err) res.status(400).send(err);
 			res.status(200).send();

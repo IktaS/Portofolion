@@ -2,6 +2,7 @@ import { Document, Schema, Model, model, Error } from "mongoose";
 import bcrypt from "bcrypt";
 import UserController from "../controllers/userControllers";
 import GithubApi from "../services/http-client/githubService";
+import { IRepo, repoSchema } from "./repoModel";
 
 export interface IUser extends Document {
 	firstName: string;
@@ -10,8 +11,9 @@ export interface IUser extends Document {
 	username: string;
 	password: string;
 	email: string;
-	githubToken: string | null;
+	githubToken: string;
 	profilePicture: string;
+	repoVisibility: IRepo[];
 }
 
 export const userSchema: Schema = new Schema({
@@ -23,6 +25,7 @@ export const userSchema: Schema = new Schema({
 	email: String,
 	githubToken: String,
 	profilePicture: String,
+	repoVisibility: [repoSchema],
 });
 
 userSchema.pre<IUser>("save", function save(next) {

@@ -36,6 +36,11 @@ export default class UserRoutes {
 			this.userController.updateGithubToken
 		);
 		this.router.patch(
+			"/update/updateRepoVisibility",
+			this.authController.lockIfNotAuthenticated,
+			this.userController.updateRepoVisibility
+		);
+		this.router.patch(
 			"/update/updatePicture",
 			this.authController.lockIfNotAuthenticated,
 			upload.single("profilePicture"),
