@@ -149,8 +149,14 @@ export default class UserController {
 			res.status(204).send();
 			return;
 		}
-
-		let repos = githubService.getRepos(userData.githubToken);
+		let repos = await githubService.getRepos(userData.githubToken);
+		userData.repoVisibility.forEach((repo) => {
+			let rep = repos!.find((rep) => {
+				return rep.id.toString() == repo.id;
+			});
+			rep!.isPublic = repo.isPublic;
+		});
+		console.log(repos);
 		res.json(repos).send();
 	}
 
