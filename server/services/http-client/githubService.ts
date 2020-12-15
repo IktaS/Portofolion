@@ -6,6 +6,7 @@ interface githubRepoData {
 	name: string;
 	url: string;
 	description: string;
+	isPublic: boolean;
 }
 
 const emptyGithubRepoData: githubRepoData = {
@@ -13,6 +14,7 @@ const emptyGithubRepoData: githubRepoData = {
 	name: "",
 	url: "",
 	description: "",
+	isPublic: false,
 };
 class GithubApi extends HttpClient {
 	public constructor() {
@@ -24,6 +26,7 @@ class GithubApi extends HttpClient {
 		repoData.id = repo.id;
 		repoData.name = repo.name;
 		repoData.url = repo.url;
+		repoData.isPublic = !repo.private;
 		let val = (
 			await this.instance.get(repo.url, {
 				headers: { Authorization: "Bearer " + token },
@@ -39,6 +42,7 @@ class GithubApi extends HttpClient {
 		repoData.name = repo.name;
 		repoData.url = repo.html_url;
 		repoData.description = repo.description;
+		repoData.isPublic = !repo.private;
 		return repoData;
 	}
 
