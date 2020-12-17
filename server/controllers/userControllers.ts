@@ -125,11 +125,13 @@ export default class UserController {
 		const img = {
 			img: {
 				data: fs.readFileSync(
-					path.join(__dirname, "..", "uploads", userData.profilePicture)
+					path.join(__dirname, "..", "uploads", userData.profilePicture),
+					{ encoding: 'base64' }
 				),
 				contentType: "image/png",
 			},
 		};
+		console.log(img);
 		res.json(img).send();
 	}
 
