@@ -17,7 +17,7 @@ export default class AuthRoutes {
 	private routes(): void {
 		this.router.post("/register", this.authController.lockIfAuthenticated, this.userController.registerUser);
 		this.router.post("/login", this.authController.lockIfAuthenticated, passport.authenticate("local"), this.userController.getDashboard);
-        this.router.post("/logout", (req,res) => {
+        this.router.get("/logout", (req,res) => {
             req.logout();
             res.status(200).send();
         })

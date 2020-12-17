@@ -23,7 +23,7 @@ export default class UserController {
 			email: req.body.email,
 			profilePicture: "",
 			githubToken: "",
-			repoVisibility: null,
+			repoVisibility: [],
 		});
 		newUser.save((err) => {
 			if (err) res.status(400).send(err);
