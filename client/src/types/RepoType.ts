@@ -3,13 +3,15 @@ export default interface Repo {
   name: string;
   url: string;
   description: string;
+  isPublic: boolean;
 }
 
 const emptyRepo: Repo = {
   id: "",
   name: "",
   url: "",
-  description: ""
+  description: "",
+  isPublic: false
 };
 
 export { emptyRepo };

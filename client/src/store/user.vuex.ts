@@ -2,6 +2,7 @@ import { createModule, mutation, action } from "vuex-class-component";
 import AuthApi from "@/services/AuthService";
 import User, { emptyUser } from "@/types/UserType";
 import { vxm } from "./store.vuex";
+import Repo from "@/types/RepoType";
 
 const VuexModule = createModule({
   namespaced: "user",
@@ -15,9 +16,19 @@ interface LoginInfo {
 
 export class UserStore extends VuexModule {
   public user: User = emptyUser;
+  public img: any;
+  public repos: Repo[] = new Array<Repo>();
 
   @mutation setUser(user: User) {
     this.user = user;
+  }
+
+  @mutation setImage(img: any) {
+    this.img = img;
+  }
+
+  @mutation setRepos(repos: Repo[]) {
+    this.repos = repos;
   }
 
   @mutation clearUser() {
