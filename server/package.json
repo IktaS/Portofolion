@@ -4,7 +4,8 @@
   "description": "portofolion serverside codes",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon -r dotenv/config index.ts",
+    "start": "nodemon -r dotenv-flow/config index.ts --node-env=development",
+    "start:dev": "nodemon -r dotenv/config index.ts dotenv_config_path=./.env.development",
     "build": "rm -rf ./build; tsc --project ./"
   },
   "keywords": [
@@ -41,6 +42,7 @@
     "@types/passport": "^1.0.4",
     "@types/passport-local": "^1.0.33",
     "dotenv": "^8.2.0",
+    "dotenv-flow": "^3.2.0",
     "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2"

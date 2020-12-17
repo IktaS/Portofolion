@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { prepareUser, User } from "../models/userModel";
+import { IUser, prepareUser, User } from "../models/userModel";
 import fs from "fs";
 import path from "path";
 import githubService from "../services/http-client/githubService";
@@ -21,7 +21,7 @@ export default class UserController {
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email,
-			img: "",
+			profilePicture: "",
 			githubToken: "",
 			repoVisibility: null,
 		});
@@ -117,13 +117,8 @@ export default class UserController {
 	}
 
 	public async getPicture(req: Request, res: Response): Promise<void> {
-		let user = req.user;
-		if (!user) {
-			res.status(400).send("No user");
-			return;
-		}
 		let userData = await User.findOne({ username: req.params.username });
-		if (!userData) {
+		if (!userData || userData.profilePicture === "") {
 			res.status(204).send();
 			return;
 		}
@@ -141,16 +136,11 @@ export default class UserController {
 	public async getRepos(req: Request, res: Response): Promise<void> {
 		let user = req.user;
 		if (!user) {
-			res.status(400).send("No user");
+			res.status(400).send();
 			return;
 		}
-		let userData = await User.findOne({ username: req.params.username });
-		if (!userData || !userData.githubToken) {
-			res.status(204).send();
-			return;
-		}
-		let repos = await githubService.getRepos(userData.githubToken);
-		userData.repoVisibility.forEach((repo) => {
+		let repos = await githubService.getRepos(user.githubToken);
+		user.repoVisibility.forEach((repo) => {
 			let rep = repos!.find((rep) => {
 				return rep.id.toString() == repo.id;
 			});
@@ -166,7 +156,7 @@ export default class UserController {
 			res.status(401).send();
 			return;
 		}
-		user = await prepareUser(user);
+		user = await prepareUser(user as IUser);
 		res.send(user);
 	}
 

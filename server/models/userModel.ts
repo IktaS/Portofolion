@@ -57,59 +57,17 @@ userSchema.methods.comparePassword = function (
 	);
 };
 
-export const filterPassword = function (obj: IUser) {
-	let user = obj as any;
-	let filtered = Object.keys(user)
-		.filter((key) => key != "password")
-		.reduce((obj: any, key) => {
-			obj[key] = user[key];
-			return obj;
-		}, {});
-	return filtered;
-};
-
-export const filterToken = function (obj: IUser) {
-	let user = obj as any;
-	let filtered = Object.keys(user)
-		.filter((key) => key != "githubToken")
-		.reduce((obj: any, key) => {
-			obj[key] = user[key];
-			return obj;
-		}, {});
-	return filtered;
-};
-
-export const filterId = function (obj: IUser) {
-	let user = obj as any;
-	let filtered = Object.keys(user)
-		.filter((key) => key != "_id")
-		.reduce((obj: any, key) => {
-			obj[key] = user[key];
-			return obj;
-		}, {});
-	return filtered;
-};
-
-export const filterVersion = function (obj: IUser) {
-	let user = obj as any;
-	let filtered = Object.keys(user)
-		.filter((key) => key != "__v")
-		.reduce((obj: any, key) => {
-			obj[key] = user[key];
-			return obj;
-		}, {});
-	return filtered;
-};
-
 export const prepareUser = async function (obj: IUser) {
 	let user = obj as any;
-	user.repos = `${process.env.APP_URL}/users/${obj.username}/repos`;
-	user = filterId(user);
-	user = filterVersion(user);
-	user = filterPassword(user);
-	user = filterToken(user);
-	let ret = user as IUser;
-	return ret;
+	const restricted = ['__v', '_id', 'githubToken', 'password'];
+	const filtered = Object.keys(user._doc).filter( key => !restricted.includes(key)).reduce((obj:any,key) => {
+		obj[key] = user[key];
+		return obj;
+	}, {});
+
+	filtered.repos = `${process.env.APP_URL}/v1/users/${obj.username}/repos`;
+	filtered.profilePicture = `${process.env.APP_URL}/v1/users/${obj.username}/img`;
+	return filtered;
 };
 
 export const User: Model<IUser> = model<IUser>("user", userSchema);
