@@ -131,8 +131,7 @@ export default class UserController {
 				contentType: "image/png",
 			},
 		};
-		console.log(img);
-		res.json(img).send();
+		res.status(200).json(img);
 	}
 
 	public async getRepos(req: Request, res: Response): Promise<void> {
@@ -149,7 +148,7 @@ export default class UserController {
 			rep!.isPublic = repo.isPublic;
 		});
 		console.log(repos);
-		res.json(repos).send();
+		res.status(200).json(repos);
 	}
 
 	public async getDashboard(req: Request, res: Response): Promise<void> {
@@ -159,7 +158,7 @@ export default class UserController {
 			return;
 		}
 		user = await prepareUser(user as IUser);
-		res.send(user);
+		res.status(200).send(user);
 	}
 
 	public async checkUser(req: Request, res: Response): Promise<void> {
