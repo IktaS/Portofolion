@@ -135,6 +135,7 @@ export default class Dashboard extends Vue {
       });
   }
 
+  // eslint-disable-next-line
   private pictureData: any;
   private havePicture = false;
 
@@ -184,6 +185,7 @@ export default class Dashboard extends Vue {
     this.userDebouncer.trigger(newUser);
   }
 
+  // eslint-disable-next-line
   private picture: any;
   // eslint-disable-next-line
   public selectFile(file: any) {

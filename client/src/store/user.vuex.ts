@@ -16,19 +16,12 @@ interface LoginInfo {
 
 export class UserStore extends VuexModule {
   public user: User = emptyUser;
+  // eslint-disable-next-line
   public img: any;
   public repos: Repo[] = new Array<Repo>();
 
   @mutation setUser(user: User) {
     this.user = user;
-  }
-
-  @mutation setImage(img: any) {
-    this.img = img;
-  }
-
-  @mutation setRepos(repos: Repo[]) {
-    this.repos = repos;
   }
 
   @mutation clearUser() {
