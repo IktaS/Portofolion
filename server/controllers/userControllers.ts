@@ -105,7 +105,7 @@ export default class UserController {
 	): Promise<void> {
 		let user = req.user;
 		if (!user) {
-			res.status(400).send();
+			res.status(401).send();
 			return;
 		}
 		if (req.body.repoVisibility != undefined)
@@ -136,7 +136,7 @@ export default class UserController {
 	public async getRepos(req: Request, res: Response): Promise<void> {
 		let user = req.user;
 		if (!user) {
-			res.status(400).send();
+			res.status(401).send();
 			return;
 		}
 		let repos = await githubService.getRepos(user.githubToken);
