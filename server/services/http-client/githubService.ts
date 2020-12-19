@@ -129,13 +129,13 @@ class GithubApi extends HttpClient {
 			).data;
 			let repos = (
 				await this.instance.get(
-					`https://api.github.com/users/${user.login}/repos?per_page=100`,
+					`https://api.github.com/search/repositories?q=user:${user.login}`,
 					{
 						headers: { Authorization: "Bearer " + token },
 					}
 				)
-			).data;
-
+			).data.items;
+			console.log(repos);
 			let repoDatas: githubRepoData[] = new Array<githubRepoData>();
 			for (const repo of repos) {
 				let repoData = this.filterRepoData(repo);

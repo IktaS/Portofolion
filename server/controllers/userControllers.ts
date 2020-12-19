@@ -157,9 +157,10 @@ export default class UserController {
 		}
 		let repos = await githubService.getRepos(user.githubToken);
 		user.repoVisibility.forEach((repo) => {
-			let rep = repos!.find((rep) => {
-				return rep.id.toString() == repo.id;
+			let rep = repos!.find((r : any) => {
+				return r.id.toString() == repo.id;
 			});
+			if(!rep) return;
 			rep!.isPublic = repo.isPublic;
 		});
 		res.status(200).json(repos);
