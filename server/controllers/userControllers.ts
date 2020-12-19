@@ -3,6 +3,7 @@ import { IUser, prepareUser, User } from "../models/userModel";
 import fs from "fs";
 import path from "path";
 import githubService from "../services/http-client/githubService";
+import { IRepo, repoSchema } from "../models/repoModel";
 
 export default class UserController {
 	public async registerUser(req: Request, res: Response): Promise<void> {
@@ -108,8 +109,22 @@ export default class UserController {
 			res.status(401).send();
 			return;
 		}
-		if (req.body.repoVisibility != undefined)
-			user.repoVisibility = req.body.repoVisibility;
+		console.log(req.body);
+		if(req.body.id == undefined || req.body.isPublic == undefined) {
+			res.status(400).send();
+			return;
+		}
+		let data = {
+			id: req.body.id,
+			isPublic: req.body.isPublic
+		}
+		let repo = user.repoVisibility.find((rep) => {return rep.id == data.id.toString()});
+		console.log(repo);
+		if(!repo){
+			user.repoVisibility.push(data as IRepo);
+		}else{
+			repo.isPublic = data.isPublic;
+		}
 		user.save((err) => {
 			if (err) res.status(400).send(err);
 			res.status(200).send();
@@ -147,7 +162,26 @@ export default class UserController {
 			});
 			rep!.isPublic = repo.isPublic;
 		});
-		console.log(repos);
+		res.status(200).json(repos);
+	}
+
+	public async getRecentRepos(req: Request, res: Response): Promise<void> {
+		let userData = await User.findOne({ username: req.params.username });
+		if (!userData || userData.githubToken === "") {
+			res.status(204).send();
+			return;
+		}
+		let repos = await githubService.getRecentRepos(userData.githubToken);
+		repos?.filter((repo) => {
+			let isPublic = (userData?.repoVisibility.find((rep) =>{
+				return rep.id == repo.id.toString();
+			}))?.isPublic;
+			if(!isPublic){
+				return repo.isPublic;
+			}else{
+				return isPublic;
+			}
+		});
 		res.status(200).json(repos);
 	}
 

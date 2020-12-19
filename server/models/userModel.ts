@@ -66,6 +66,7 @@ export const prepareUser = async function (obj: IUser) {
 	}, {});
 
 	filtered.repos = `${process.env.APP_URL}/v1/users/${obj.username}/repos`;
+	filtered.recentRepos = `${process.env.APP_URL}/v1/users/${obj.username}/recentRepos`;
 	filtered.profilePicture = `${process.env.APP_URL}/v1/users/${obj.username}/img`;
 	return filtered;
 };
