@@ -40,7 +40,7 @@ class UserApi extends HttpClient {
     }
   }
 
-  public updateUser = async (user: User) => {
+  public async updateUser(user: User) {
     try {
       return await this.instance.patch<User>("/update/updateProfile", user, {
         withCredentials: true
@@ -48,10 +48,10 @@ class UserApi extends HttpClient {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public updateUserPicture = async (data: FormData) => {
+  public async updateUserPicture(data: FormData) {
     try {
       return await this.instance.patch<User>("/update/updatePicture", data, {
         withCredentials: true
@@ -59,9 +59,24 @@ class UserApi extends HttpClient {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  public getHome = async () => {
+  //eslint-disable-next-line
+  public async updateUserRepoVisibility(data: any){
+    try {
+      return await this.instance.patch<User>(
+        "/update/updateRepoVisibility",
+        data,
+        {
+          withCredentials: true
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public async getHome() {
     try {
       return (
         await this.instance.get<User>(`/dashboard`, { withCredentials: true })
@@ -69,17 +84,17 @@ class UserApi extends HttpClient {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  public check = async (value: string) => {
+  public async check(value: string) {
     try {
       return (await this.instance.get(`/check/${value}`)).data;
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  public saveToken = async (code: string) => {
+  public async saveToken(code: string) {
     try {
       const data = {
         code: code
@@ -90,7 +105,7 @@ class UserApi extends HttpClient {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
 }
 
 export default new UserApi();

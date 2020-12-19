@@ -6,13 +6,22 @@
           <v-col cols="4" align="center">
             <v-row>
               <v-col align="center">
+                <v-progress-circular
+                  indeterminate
+                  color="black"
+                  v-if="isPictureLoading"
+                ></v-progress-circular>
                 <v-avatar color="rgba(255,255,255,0)" size="256">
-                  <v-icon v-if="!havePicture" size="256" color="primary">
+                  <v-icon
+                    v-if="!havePicture && !isPictureLoading"
+                    size="256"
+                    color="primary"
+                  >
                     mdi-account-circle
                   </v-icon>
                   <v-img
                     contain
-                    v-if="havePicture"
+                    v-if="havePicture && !isPictureLoading"
                     :src="
                       `data:${pictureData.contentType};base64,${pictureData.data}`
                     "
@@ -33,11 +42,11 @@
               />
             </v-row>
           </v-col>
-          <v-col>
-            <v-row align="start" v-if="userDataLoadingStatus">
+          <v-col align="start">
+            <v-row align="center" v-if="userDataLoadingStatus">
               <v-progress-circular
                 indeterminate
-                color="primary"
+                color="black"
               ></v-progress-circular>
             </v-row>
             <v-row align="start" v-if="!userDataLoadingStatus">
@@ -66,7 +75,15 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row v-if="!hasToken">
+        <v-row v-if="isRepoLoading">
+          <v-col align="center">
+            <v-progress-circular
+              indeterminate
+              color="black"
+            ></v-progress-circular>
+          </v-col>
+        </v-row>
+        <v-row v-if="!hasToken && !isRepoLoading">
           <v-col align="center">
             <v-btn :href="oauthLink">
               <v-icon>mdi-github</v-icon>
@@ -74,7 +91,7 @@
             </v-btn>
           </v-col>
         </v-row>
-        <div v-if="hasToken">
+        <div v-if="hasToken && !isRepoLoading">
           <v-row>
             <v-col align="center">
               <v-sheet>
@@ -138,6 +155,7 @@ export default class Dashboard extends Vue {
   // eslint-disable-next-line
   private pictureData: any;
   private havePicture = false;
+  private isPictureLoading = true;
 
   async getPictureData() {
     UserService.getUserPicture(vxm.user.user.username).then(val => {
@@ -147,12 +165,14 @@ export default class Dashboard extends Vue {
       }
       this.pictureData = val.img;
       this.havePicture = true;
+      this.isPictureLoading = false;
     });
   }
 
   private reposData: Repo[] = new Array<Repo>();
   //eslint-disable-next-line
   private hasToken = false;
+  private isRepoLoading = true;
 
   async getReposData() {
     UserService.getUserRepos(vxm.user.user.username).then(repos => {
@@ -162,6 +182,7 @@ export default class Dashboard extends Vue {
       }
       this.reposData = repos;
       this.hasToken = true;
+      this.isRepoLoading = false;
     });
   }
 
