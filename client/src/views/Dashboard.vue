@@ -3,7 +3,7 @@
     <content-holder>
       <v-container>
         <v-row>
-          <v-col cols="4" align="center">
+          <v-col cols="4" align="center" class="userPicture">
             <v-row>
               <v-col align="center">
                 <v-avatar color="rgba(255,255,255,0)" size="256">
@@ -42,7 +42,7 @@
               />
             </v-row>
           </v-col>
-          <v-col align="start">
+          <v-col align="start" class="userData">
             <v-row align="center" v-if="userDataLoadingStatus">
               <v-progress-circular
                 indeterminate
@@ -50,32 +50,37 @@
               ></v-progress-circular>
             </v-row>
             <v-row align="start" v-if="!userDataLoadingStatus">
-              <v-col>
+              <v-col align="start">
                 <v-text-field
                   v-model="userData.firstName"
                   label="First Name"
                   clearable
+                  outlined
                 ></v-text-field>
               </v-col>
-              <v-col>
+              <v-col align="start">
                 <v-text-field
                   v-model="userData.lastName"
                   label="Last Name"
                   clearable
+                  outlined
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row v-if="!userDataLoadingStatus">
-              <v-textarea
-                clearable
-                clear-icon="mdi-close-circle"
-                label="Describe yourself!"
-                v-model="userData.description"
-              ></v-textarea>
+              <v-col align="start">
+                <v-textarea
+                  clearable
+                  outlined
+                  clear-icon="mdi-close-circle"
+                  label="Describe yourself!"
+                  v-model="userData.description"
+                ></v-textarea>
+              </v-col>
             </v-row>
           </v-col>
         </v-row>
-        <v-row v-if="isRepoLoading">
+        <v-row v-if="isRepoLoading" class="userRepo">
           <v-col align="center">
             <v-progress-circular
               indeterminate
@@ -83,7 +88,7 @@
             ></v-progress-circular>
           </v-col>
         </v-row>
-        <v-row v-if="!hasToken && !isRepoLoading">
+        <v-row v-if="!hasToken && !isRepoLoading" class="userRepo">
           <v-col align="center">
             <v-btn :href="oauthLink">
               <v-icon>mdi-github</v-icon>
@@ -91,7 +96,7 @@
             </v-btn>
           </v-col>
         </v-row>
-        <div v-if="hasToken && !isRepoLoading">
+        <div v-if="hasToken && !isRepoLoading" class="userRepo">
           <v-row>
             <v-col align="center">
               <v-sheet>
