@@ -6,12 +6,12 @@
           <v-col cols="4" align="center">
             <v-row>
               <v-col align="center">
-                <v-progress-circular
-                  indeterminate
-                  color="black"
-                  v-if="isPictureLoading"
-                ></v-progress-circular>
                 <v-avatar color="rgba(255,255,255,0)" size="256">
+                  <v-progress-circular
+                    indeterminate
+                    color="black"
+                    v-if="isPictureLoading"
+                  ></v-progress-circular>
                   <v-icon
                     v-if="!havePicture && !isPictureLoading"
                     size="256"
