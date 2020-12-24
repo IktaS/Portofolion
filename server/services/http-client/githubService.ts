@@ -135,7 +135,6 @@ class GithubApi extends HttpClient {
 					}
 				)
 			).data.items;
-			console.log(repos);
 			let repoDatas: githubRepoData[] = new Array<githubRepoData>();
 			for (const repo of repos) {
 				let repoData = this.filterRepoData(repo);
