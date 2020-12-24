@@ -8,7 +8,7 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
         <button class="Logo" @click="Home">
-          Portofolion
+          PortoGit
         </button>
       </v-toolbar-title>
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
@@ -94,8 +94,9 @@ export default class NavBar extends Vue {
   }
 
   public logout() {
-    vxm.user.logout();
-    window.location.reload();
+    vxm.user.logout().then(() => {
+      router.push("/login");
+    });
   }
 
   public Home() {
