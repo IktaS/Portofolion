@@ -1,5 +1,5 @@
 <template>
-  <v-card width="200" height="300" elevation="2" outlined>
+  <v-card height="100%" outlined class="card-outter">
     <v-card-title>{{ repo.name }}</v-card-title>
     <v-card-text v-if="repo.description !== null">
       {{ repo.description }}
@@ -7,7 +7,7 @@
     <v-card-text v-if="repo.description === null">
       No description
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions class="card-actions">
       <v-spacer />
       <v-btn icon :href="repo.url">
         <v-icon>mdi-github</v-icon>
@@ -42,4 +42,14 @@ export default class GithubCard extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-outter {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.card-actions {
+  position: relative;
+  bottom: 0;
+}
+</style>

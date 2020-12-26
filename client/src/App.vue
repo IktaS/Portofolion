@@ -28,15 +28,4 @@ export default class App extends Vue {
 }
 </script>
 
-<style>
-html {
-  overflow: hidden !important;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-</style>
+<style></style>

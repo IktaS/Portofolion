@@ -97,21 +97,7 @@
           </v-col>
         </v-row>
         <div v-if="hasToken && !isRepoLoading" class="userRepo">
-          <v-row>
-            <v-col align="center">
-              <v-sheet>
-                <v-slide-group class="pa-4">
-                  <v-slide-item
-                    v-for="repo in reposData"
-                    :key="repo.id"
-                    style="margin: 3px"
-                  >
-                    <github-card :repoData="repo"> </github-card>
-                  </v-slide-item>
-                </v-slide-group>
-              </v-sheet>
-            </v-col>
-          </v-row>
+          <github-card-grid :repoDatas="reposData" />
         </div>
       </v-container>
     </content-holder>
@@ -127,11 +113,13 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import User, { emptyUser } from "@/types/UserType";
 import { Debounce } from "@/utils/eventsUtil";
 import GithubCard from "@/components/GithubCard.vue";
+import GithubCardGrid from "@/components/GithubCardGrid.vue";
 import Repo from "@/types/RepoType";
 @Component({
   components: {
     ContentHolder,
-    GithubCard
+    GithubCard,
+    GithubCardGrid
   }
 })
 export default class Dashboard extends Vue {
