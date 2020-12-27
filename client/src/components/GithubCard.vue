@@ -44,12 +44,12 @@ export default class GithubCard extends Vue {
 
 <style scoped>
 .card-outter {
-  position: relative;
-  margin-bottom: 2rem;
+  padding-bottom: 4rem;
 }
 
 .card-actions {
-  position: relative;
+  position: absolute;
   bottom: 0;
+  right: 0;
 }
 </style>
