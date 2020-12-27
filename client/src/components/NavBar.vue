@@ -1,13 +1,14 @@
 <template>
   <div class="navbar">
-    <v-app-bar app dense elevation="2">
+    <v-app-bar app dense elevation="2" dark>
       <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-app-bar-nav-icon
         v-if="$vuetify.breakpoint.mobile"
+        class="hamburger-button"
         @click="drawer = true"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
-        <button class="Logo" @click="Home">
+        <button class="logo" @click="Home">
           PortoGit
         </button>
       </v-toolbar-title>
@@ -30,9 +31,14 @@
               {{ user.username }}
             </v-btn>
           </template>
-          <v-list>
+          <v-list dense>
             <v-list-item>
-              <v-btn outlined @click="logout">
+              <v-btn @click="dashboard" text>
+                Dashboard
+              </v-btn>
+            </v-list-item>
+            <v-list-item>
+              <v-btn @click="logout" text>
                 Logout
               </v-btn>
             </v-list-item>
@@ -53,12 +59,17 @@
             </v-btn>
           </v-list-item>
         </v-list-item-group>
-        <v-list-item-group v-if="isLoggedIn">
+        <v-list-item-group v-if="isLoggedIn" dense>
           <v-list-item inactive>
             <v-list-item-title>{{ user.username }}</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-btn outlined @click="logout">
+            <v-btn @click="dashboard" text>
+              Dashboard
+            </v-btn>
+          </v-list-item>
+          <v-list-item>
+            <v-btn @click="logout" text>
               Logout
             </v-btn>
           </v-list-item>
@@ -99,6 +110,12 @@ export default class NavBar extends Vue {
     });
   }
 
+  public dashboard() {
+    vxm.user.logout().then(() => {
+      router.push("/dashboard");
+    });
+  }
+
   public Home() {
     router.push("/about").catch(() => {
       return null;
@@ -107,4 +124,12 @@ export default class NavBar extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.logo {
+  color: whitesmoke;
+}
+
+.hamburger-button {
+  color: whitesmoke;
+}
+</style>
