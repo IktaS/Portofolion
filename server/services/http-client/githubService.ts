@@ -79,7 +79,7 @@ class GithubApi extends HttpClient {
 			//events array
 			let events : any[] = (
 				await this.instance.get(
-					`https://api.github.com/users/${user.login}/events?per_page=50`,
+					`https://api.github.com/users/${user.login}/events?per_page=100`,
 					{
 						headers: { Authorization: "Bearer " + token },
 					}

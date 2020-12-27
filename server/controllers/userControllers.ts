@@ -168,20 +168,27 @@ export default class UserController {
 
 	public async getRecentRepos(req: Request, res: Response): Promise<void> {
 		let userData = await User.findOne({ username: req.params.username });
-		if (!userData || userData.githubToken === "") {
+		if (userData == null) {
+			res.status(204).send();
+			return;
+		}
+		if (userData.githubToken === ""){
 			res.status(204).send();
 			return;
 		}
 		let repos = await githubService.getRecentRepos(userData.githubToken);
-		repos?.filter((repo) => {
-			let isPublic = (userData?.repoVisibility.find((rep) =>{
+		if(!repos){
+			res.status(204).send();
+			return;
+		}
+		repos = repos.filter((repo) => {
+			let repoVis = userData!.repoVisibility.find((rep) => {
 				return rep.id == repo.id.toString();
-			}))?.isPublic;
-			if(!isPublic){
+			})
+			if(!repoVis){
 				return repo.isPublic;
-			}else{
-				return isPublic;
 			}
+			return repoVis.isPublic;
 		});
 		res.status(200).json(repos);
 	}
