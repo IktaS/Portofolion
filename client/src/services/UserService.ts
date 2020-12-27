@@ -9,7 +9,7 @@ class UserApi extends HttpClient {
 
   public async getUser(id: string) {
     try {
-      return await this.instance.get<User>(`${id}`);
+      return (await this.instance.get<User>(`${id}`)).data;
     } catch (error) {
       console.error(error);
     }
@@ -33,6 +33,18 @@ class UserApi extends HttpClient {
         await this.instance.get<Repo[]>(
           `${process.env.VUE_APP_API_URL}/v1/users/${id}/repos`,
           { withCredentials: true }
+        )
+      ).data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public async getRecentUserRepos(id: string) {
+    try {
+      return (
+        await this.instance.get<Repo[]>(
+          `${process.env.VUE_APP_API_URL}/v1/users/${id}/recentRepos`
         )
       ).data;
     } catch (error) {

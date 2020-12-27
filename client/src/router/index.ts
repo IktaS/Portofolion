@@ -4,6 +4,7 @@ import Dashboard from "@/views/Dashboard.vue";
 import Login from "@/views/Login.vue";
 import About from "@/views/About.vue";
 import SignUp from "@/views/SignUp.vue";
+import UserPage from "@/views/UserPage.vue";
 import OAuthRedirect from "@/components/oauth/oauthRedirect.vue";
 
 Vue.use(VueRouter);
@@ -36,6 +37,11 @@ const routes: Array<RouteConfig> = [
     path: "/signup",
     name: "SignUp",
     component: SignUp
+  },
+  {
+    path: "/user/:id",
+    name: "UserPage",
+    component: UserPage
   }
 ];
 

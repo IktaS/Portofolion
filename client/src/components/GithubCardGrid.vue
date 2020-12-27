@@ -6,7 +6,7 @@
     :search="search"
     hide-default-footer
   >
-    <template v-slot:header>
+    <template v-slot:header v-if="hasSearch">
       <v-toolbar dark class="mb-1">
         <v-text-field
           v-model="search"
@@ -94,6 +94,7 @@ import GithubCard from "@/components/GithubCard.vue";
 })
 export default class GithubCardGrid extends Vue {
   @Prop() repoDatas!: Repo[];
+  @Prop({ default: true }) hasSearch!: boolean;
 
   private itemsPerPageArray = [12, 24, 36];
   private search = "";
