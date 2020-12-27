@@ -7,7 +7,7 @@
     hide-default-footer
   >
     <template v-slot:header>
-      <v-toolbar dark color="black" class="mb-1">
+      <v-toolbar dark class="mb-1">
         <v-text-field
           v-model="search"
           clearable
