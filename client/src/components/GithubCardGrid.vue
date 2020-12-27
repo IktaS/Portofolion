@@ -30,7 +30,7 @@
           md="4"
           lg="3"
         >
-          <github-card :repoData="item" />
+          <github-card :repoData="item" :showVisibility="showVisibility" />
         </v-col>
       </v-row>
     </template>
@@ -95,6 +95,7 @@ import GithubCard from "@/components/GithubCard.vue";
 export default class GithubCardGrid extends Vue {
   @Prop() repoDatas!: Repo[];
   @Prop({ default: true }) hasSearch!: boolean;
+  @Prop({ default: true }) showVisibility!: boolean;
 
   private itemsPerPageArray = [12, 24, 36];
   private search = "";

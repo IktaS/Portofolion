@@ -12,7 +12,7 @@
       <v-btn icon :href="repo.url">
         <v-icon>mdi-github</v-icon>
       </v-btn>
-      <v-btn icon @click="changeRepoVisibility">
+      <v-btn icon @click="changeRepoVisibility" v-if="showVisibility">
         <v-icon v-if="repo.isPublic">mdi-eye</v-icon>
         <v-icon v-if="!repo.isPublic">mdi-eye-off</v-icon>
       </v-btn>
@@ -28,6 +28,7 @@ import UserService from "@/services/UserService";
 @Component
 export default class GithubCard extends Vue {
   @Prop() repoData!: Repo;
+  @Prop({ default: true }) showVisibility!: Repo;
   get repo() {
     return this.repoData;
   }

@@ -112,7 +112,11 @@
           </v-col>
         </v-row>
         <div v-if="hasToken && !isRepoLoading" class="userRepo">
-          <github-card-grid :repoDatas="reposData" :hasSearch="false" />
+          <github-card-grid
+            :repoDatas="reposData"
+            :hasSearch="false"
+            :showVisibility="false"
+          />
         </div>
       </v-container>
     </content-holder>
