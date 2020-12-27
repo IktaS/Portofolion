@@ -2,7 +2,7 @@
   <div class="home">
     <content-holder>
       <v-container>
-        <v-row>
+        <v-row v-if="!$vuetify.breakpoint.mobile">
           <v-col cols="4" align="center" class="userPicture">
             <v-row>
               <v-col align="center">
@@ -69,6 +69,87 @@
             </v-row>
             <v-row v-if="!userDataLoadingStatus">
               <v-col align="start">
+                <v-textarea
+                  clearable
+                  outlined
+                  clear-icon="mdi-close-circle"
+                  label="Describe yourself!"
+                  v-model="userData.description"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row v-if="$vuetify.breakpoint.mobile" dense>
+          <v-col>
+            <v-row>
+              <v-col align="center">
+                <v-avatar color="rgba(255,255,255,0)" size="256">
+                  <v-progress-circular
+                    indeterminate
+                    color="black"
+                    v-if="isPictureLoading"
+                  ></v-progress-circular>
+                  <v-icon
+                    v-if="!havePicture && !isPictureLoading"
+                    size="256"
+                    color="primary"
+                  >
+                    mdi-account-circle
+                  </v-icon>
+                  <v-img
+                    contain
+                    v-if="havePicture && !isPictureLoading"
+                    :src="
+                      `data:${pictureData.contentType};base64,${pictureData.data}`
+                    "
+                  >
+                  </v-img>
+                </v-avatar>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col align="center">
+                <v-file-input
+                  accept="image/png"
+                  hide-input
+                  ref="uploadFile"
+                  prepend-icon="mdi-account-edit"
+                  truncate-length="0"
+                  @change="selectFile"
+                />
+              </v-col>
+            </v-row>
+            <v-row v-if="userDataLoadingStatus">
+              <v-col align="center">
+                <v-progress-circular
+                  indeterminate
+                  color="black"
+                ></v-progress-circular>
+              </v-col>
+            </v-row>
+            <v-row align="center" v-if="!userDataLoadingStatus">
+              <v-col align="center">
+                <v-text-field
+                  v-model="userData.firstName"
+                  label="First Name"
+                  clearable
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col align="center">
+                <v-text-field
+                  v-model="userData.lastName"
+                  label="Last Name"
+                  clearable
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row v-if="!userDataLoadingStatus">
+              <v-col align="center">
                 <v-textarea
                   clearable
                   outlined
