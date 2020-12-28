@@ -16,7 +16,7 @@
         <v-col>
           <v-chip-group column class="card-chips">
             <v-chip
-              v-for="language in repo.languages"
+              v-for="language in repo.languages.slice(0, 5)"
               :key="language"
               disabled
               small
