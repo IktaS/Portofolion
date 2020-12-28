@@ -7,6 +7,7 @@ interface githubRepoData {
 	url: string;
 	description: string;
 	isPublic: boolean;
+	languages: string[];
 }
 
 const emptyGithubRepoData: githubRepoData = {
@@ -15,6 +16,7 @@ const emptyGithubRepoData: githubRepoData = {
 	url: "",
 	description: "",
 	isPublic: false,
+	languages: [],
 };
 class GithubApi extends HttpClient {
 	public constructor() {
@@ -37,16 +39,35 @@ class GithubApi extends HttpClient {
 		repoData.url = val.html_url;
 		repoData.description = val.description;
 		repoData.isPublic = !val.private;
+		try {
+			let res = await this.instance.get(repo.languages_url, {
+				headers: { Authorization: "Bearer " + token }, 
+			})
+			val = res.data.keys();
+		} catch(err) {
+			return null;
+		}
+		repoData.languages = val;
 		return repoData;
 	}
 
-	private filterRepoData(repo: any) {
+	private async filterRepoData(repo: any, token: string) {
 		let repoData: githubRepoData = emptyGithubRepoData;
 		repoData.id = repo.id;
 		repoData.name = repo.name;
 		repoData.url = repo.html_url;
 		repoData.description = repo.description;
 		repoData.isPublic = !repo.private;
+		let val: Object;
+		try {
+			let res = await this.instance.get(repo.languages_url, {
+				headers: { Authorization: "Bearer " + token }, 
+			})
+			val = res.data;
+		} catch(err) {
+			return null;
+		}
+		repoData.languages = Object.keys(val);
 		return repoData;
 	}
 
@@ -137,10 +158,12 @@ class GithubApi extends HttpClient {
 			).data.items;
 			let repoDatas: githubRepoData[] = new Array<githubRepoData>();
 			for (const repo of repos) {
-				let repoData = this.filterRepoData(repo);
+				let repoData = await this.filterRepoData(repo, token);
+				if(!repoData) continue;
 				let cloneData = Object.assign({}, repoData);
 				repoDatas.push(cloneData);
 			}
+			console.log(repoDatas);
 			return repoDatas;
 		} catch (error) {
 			console.error(error);
