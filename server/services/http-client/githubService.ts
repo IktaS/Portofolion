@@ -40,14 +40,15 @@ class GithubApi extends HttpClient {
 		repoData.description = val.description;
 		repoData.isPublic = !val.private;
 		try {
-			let res = await this.instance.get(repo.languages_url, {
+			let res = await this.instance.get(val.languages_url, {
 				headers: { Authorization: "Bearer " + token }, 
 			})
-			val = res.data.keys();
+			val = res.data;
 		} catch(err) {
 			return null;
 		}
-		repoData.languages = val;
+		repoData.languages = Object.keys(val);
+		console.log(repoData.languages);
 		return repoData;
 	}
 
@@ -58,7 +59,7 @@ class GithubApi extends HttpClient {
 		repoData.url = repo.html_url;
 		repoData.description = repo.description;
 		repoData.isPublic = !repo.private;
-		let val: Object;
+		let val: any;
 		try {
 			let res = await this.instance.get(repo.languages_url, {
 				headers: { Authorization: "Bearer " + token }, 
