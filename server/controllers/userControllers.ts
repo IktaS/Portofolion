@@ -155,6 +155,9 @@ export default class UserController {
 			res.status(401).send();
 			return;
 		}
+		if(!user.githubToken || user.githubToken == ""){
+			res.status(204).send();
+		}
 		let repos = await githubService.getRepos(user.githubToken);
 		user.repoVisibility.forEach((repo) => {
 			let rep = repos!.find((r : any) => {
