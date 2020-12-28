@@ -233,8 +233,9 @@ export default class Dashboard extends Vue {
 
   async getPictureData() {
     UserService.getUserPicture(vxm.user.user.username).then(val => {
-      if (!val) {
+      if (val == "") {
         this.havePicture = false;
+        this.isPictureLoading = false;
         return;
       }
       this.pictureData = val.img;
@@ -252,6 +253,7 @@ export default class Dashboard extends Vue {
     UserService.getUserRepos(vxm.user.user.username).then(repos => {
       if (!repos) {
         this.hasToken = false;
+        this.isRepoLoading = false;
         return;
       }
       this.reposData = repos;
