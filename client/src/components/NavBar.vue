@@ -7,8 +7,8 @@
         class="hamburger-button"
         @click="drawer = true"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>
-        <button class="logo" @click="Home">
+      <v-toolbar-title class="logo text-h5">
+        <button @click="Home">
           PortoGit
         </button>
       </v-toolbar-title>
@@ -81,6 +81,7 @@
 
 <script lang="ts">
 import router from "@/router";
+import UserService from "@/services/UserService";
 import { vxm } from "@/store/store.vuex";
 import { emptyUser } from "@/types/UserType";
 import Vue from "vue";
@@ -117,8 +118,27 @@ export default class NavBar extends Vue {
   }
 
   public Home() {
-    router.push("/about").catch(() => {
-      return null;
+    if (this.isLoggedIn) {
+      router.push("/dashboard").catch(() => {
+        return null;
+      });
+    } else {
+      router.push("/").catch(() => {
+        return null;
+      });
+    }
+  }
+
+  mounted() {
+    this.getUserData();
+  }
+
+  async getUserData() {
+    UserService.getHome().then(user => {
+      if (!user) {
+        return;
+      }
+      vxm.user.setUser(user);
     });
   }
 }

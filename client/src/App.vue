@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <NavBar />
     <v-main>
       <router-view></router-view>
@@ -28,4 +28,8 @@ export default class App extends Vue {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.app {
+  font-family: "Product Sans", sans-serif;
+}
+</style>
