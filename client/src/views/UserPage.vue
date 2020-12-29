@@ -148,7 +148,7 @@ export default class UserPage extends Vue {
     UserService.getUser(this.$route.params.id)
       .then(user => {
         if (!user) {
-          router.push("/404");
+          router.push("/error/404");
           return;
         }
         this.userDataLoadingStatus = false;

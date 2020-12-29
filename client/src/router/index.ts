@@ -6,6 +6,7 @@ import About from "@/views/About.vue";
 import SignUp from "@/views/SignUp.vue";
 import UserPage from "@/views/UserPage.vue";
 import OAuthRedirect from "@/components/oauth/oauthRedirect.vue";
+import ErrorPage from "@/views/ErrorPage.vue";
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,11 @@ const routes: Array<RouteConfig> = [
     path: "/user/:id",
     name: "UserPage",
     component: UserPage
+  },
+  {
+    path: "/error/:errorcode",
+    name: "ErrorPage",
+    component: ErrorPage
   }
 ];
 
