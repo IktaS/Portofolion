@@ -169,6 +169,7 @@ export default class UserPage extends Vue {
     UserService.getUserPicture(this.userData.username).then(val => {
       if (!val) {
         this.havePicture = false;
+        this.isPictureLoading = false;
         return;
       }
       this.pictureData = val.img;
@@ -187,6 +188,7 @@ export default class UserPage extends Vue {
       .then(repos => {
         if (!repos) {
           this.hasToken = false;
+          this.isRepoLoading = false;
           return;
         }
         this.reposData = repos;
