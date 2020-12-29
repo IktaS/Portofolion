@@ -30,7 +30,7 @@ export class UserStore extends VuexModule {
 
   @action async login(payload: LoginInfo) {
     try {
-      const res = await AuthApi.login(payload.username, payload.username);
+      const res = await AuthApi.login(payload.username, payload.password);
       this.user = res;
       vxm.event.showSnackbar("Successfully Logged In!");
     } catch (error) {

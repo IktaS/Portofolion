@@ -92,8 +92,11 @@ export default class LoginForm extends Vue {
       form.validate();
       return;
     }
-    vxm.user.login({ username: this.username, password: this.password });
-    setTimeout(() => router.push("/dashboard"), 1000);
+    vxm.user
+      .login({ username: this.username, password: this.password })
+      .then(() => {
+        router.push("/dashboard");
+      });
   }
 
   @Watch("username")
