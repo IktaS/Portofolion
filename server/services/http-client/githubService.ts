@@ -24,7 +24,7 @@ class GithubApi extends HttpClient {
 	}
 
 	private async prepareRepoData(repo: any, token: string) {
-		let repoData: githubRepoData = emptyGithubRepoData;
+		let repoData: githubRepoData = {...emptyGithubRepoData};
 		repoData.id = repo.id;
 		repoData.name = repo.name;
 		let val : any;
@@ -48,12 +48,11 @@ class GithubApi extends HttpClient {
 			return null;
 		}
 		repoData.languages = Object.keys(val);
-		console.log(repoData.languages);
 		return repoData;
 	}
 
 	private async filterRepoData(repo: any, token: string) {
-		let repoData: githubRepoData = emptyGithubRepoData;
+		let repoData: githubRepoData = {...emptyGithubRepoData};
 		repoData.id = repo.id;
 		repoData.name = repo.name;
 		repoData.url = repo.html_url;
@@ -113,7 +112,7 @@ class GithubApi extends HttpClient {
 			});
 			
 
-			let latestPushesRepo: any[] = [];
+			let latestPushesRepo: any[] = new Array();
 
 			events.forEach((event: any) => {
 				latestPushesRepo.push(event.repo);
@@ -164,7 +163,6 @@ class GithubApi extends HttpClient {
 				let cloneData = Object.assign({}, repoData);
 				repoDatas.push(cloneData);
 			}
-			console.log(repoDatas);
 			return repoDatas;
 		} catch (error) {
 			console.error(error);
