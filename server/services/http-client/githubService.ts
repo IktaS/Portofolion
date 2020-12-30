@@ -23,34 +23,6 @@ class GithubApi extends HttpClient {
 		super("");
 	}
 
-	private async prepareRepoData(repo: any, token: string) {
-		let repoData: githubRepoData = {...emptyGithubRepoData};
-		repoData.id = repo.id;
-		repoData.name = repo.name;
-		let val : any;
-		try {
-			let res = await this.instance.get(repo.url, {
-				headers: { Authorization: "Bearer " + token }, 
-			})
-			val = res.data;
-		} catch(err) {
-			return null;
-		}
-		repoData.url = val.html_url;
-		repoData.description = val.description;
-		repoData.isPublic = !val.private;
-		try {
-			let res = await this.instance.get(val.languages_url, {
-				headers: { Authorization: "Bearer " + token }, 
-			})
-			val = res.data;
-		} catch(err) {
-			return null;
-		}
-		repoData.languages = Object.keys(val);
-		return repoData;
-	}
-
 	private async filterRepoData(repo: any, token: string) {
 		let repoData: githubRepoData = {...emptyGithubRepoData};
 		repoData.id = repo.id;
@@ -98,24 +70,29 @@ class GithubApi extends HttpClient {
 				})
 			).data;
 			//events array
-			let events : any[] = (
+			let commits : any[] = (
 				await this.instance.get(
-					`https://api.github.com/users/${user.login}/events?per_page=50&q=type:PushEvent`,
+					`https://api.github.com/search/commits?q=committer:${user.login}+sort:committer-date`,
 					{
-						headers: { Authorization: "Bearer " + token },
+						headers: { 
+							Authorization: "Bearer " + token ,
+							accept: "application/vnd.github.cloak-preview.json"
+						},
 					}
 				)
-			).data;
+			).data.items;
 
-			let latestPushesRepo: any[] = new Array();
 
-			events.forEach((event: any) => {
-				latestPushesRepo.push(event.repo);
+
+			let latestCommitsRepo: any[] = new Array();
+
+			commits.forEach((commit: any) => {
+				latestCommitsRepo.push(commit.repository);
 			});
 			
 
 			const flags = new Set();
-			const latestRepos = latestPushesRepo.filter((repo) => {
+			const latestRepos = latestCommitsRepo.filter((repo) => {
 				if (flags.has(repo.id)) {
 					return false;
 				}
@@ -125,10 +102,9 @@ class GithubApi extends HttpClient {
 
 			let repoDatas: githubRepoData[] = new Array<githubRepoData>();
 			for (const repo of latestRepos) {
-				let repoData = await this.prepareRepoData(repo, token);
+				let repoData = await this.filterRepoData(repo, token);
 				if(!repoData) continue;
-				let cloneData = Object.assign({}, repoData);
-				repoDatas.push(cloneData);
+				repoDatas.push({...repoData});
 			}
 			return repoDatas;
 		} catch (error) {
@@ -155,8 +131,7 @@ class GithubApi extends HttpClient {
 			for (const repo of repos) {
 				let repoData = await this.filterRepoData(repo, token);
 				if(!repoData) continue;
-				let cloneData = Object.assign({}, repoData);
-				repoDatas.push(cloneData);
+				repoDatas.push({...repoData});
 			}
 			return repoDatas;
 		} catch (error) {
