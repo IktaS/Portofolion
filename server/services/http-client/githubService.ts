@@ -100,17 +100,12 @@ class GithubApi extends HttpClient {
 			//events array
 			let events : any[] = (
 				await this.instance.get(
-					`https://api.github.com/users/${user.login}/events?per_page=100`,
+					`https://api.github.com/users/${user.login}/events?per_page=50&q=type:PushEvent`,
 					{
 						headers: { Authorization: "Bearer " + token },
 					}
 				)
 			).data;
-
-			events = events.filter((event: any) => {
-				return event.type === "PushEvent";
-			});
-			
 
 			let latestPushesRepo: any[] = new Array();
 
