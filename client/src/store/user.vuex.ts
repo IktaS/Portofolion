@@ -15,7 +15,7 @@ interface LoginInfo {
 }
 
 export class UserStore extends VuexModule {
-  public user: User = emptyUser;
+  public user: User = { ...emptyUser };
   // eslint-disable-next-line
   public img: any;
   public repos: Repo[] = new Array<Repo>();
@@ -25,7 +25,7 @@ export class UserStore extends VuexModule {
   }
 
   @mutation clearUser() {
-    this.user = emptyUser;
+    this.user = { ...emptyUser };
   }
 
   @action async login(payload: LoginInfo) {
@@ -34,7 +34,7 @@ export class UserStore extends VuexModule {
       this.user = res;
       vxm.event.showSnackbar("Successfully Logged In!");
     } catch (error) {
-      this.user = emptyUser;
+      this.clearUser();
       vxm.event.showSnackbar("Something went wrong");
     }
   }
@@ -42,7 +42,7 @@ export class UserStore extends VuexModule {
   @action async logout() {
     try {
       await AuthApi.logout();
-      this.user = emptyUser;
+      this.clearUser();
     } catch (error) {
       console.error(error);
     }
