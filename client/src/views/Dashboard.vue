@@ -180,6 +180,13 @@
         <div v-if="hasToken && !isRepoLoading" class="userRepo">
           <github-card-grid :repoDatas="reposData" />
         </div>
+        <div class="fab-button">
+          <v-btn fab small :href="userProfileLink">
+            <v-icon>
+              mdi-play
+            </v-icon>
+          </v-btn>
+        </div>
       </v-container>
     </content-holder>
   </div>
@@ -224,6 +231,10 @@ export default class Dashboard extends Vue {
         this.getPictureData();
         this.getReposData();
       });
+  }
+
+  get userProfileLink() {
+    return `/user/${vxm.user.user.username}`;
   }
 
   // eslint-disable-next-line
@@ -297,3 +308,11 @@ export default class Dashboard extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.fab-button {
+  position: absolute;
+  top: 0;
+  right: -3rem;
+}
+</style>
